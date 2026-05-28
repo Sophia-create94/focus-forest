@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:#fff;}
+  .card{padding:20px 24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+  .group{display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .lbl{font-family:var(--font-body);font-size:11px;color:#666;}
+  .val{font-family:ui-monospace,monospace;font-size:10px;color:#999;}
+  .r{background:#3B7A57;width:64px;height:64px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-body);font-size:11px;}
+</style></head>
+<body><div class="card">
+  <div class="group"><div class="r" style="border-radius:3px">checkbox</div><div class="val">3px</div></div>
+  <div class="group"><div class="r" style="border-radius:4px">xs</div><div class="val">4px</div></div>
+  <div class="group"><div class="r" style="border-radius:8px">sm</div><div class="val">8px</div></div>
+  <div class="group"><div class="r" style="border-radius:10px">input</div><div class="val">10px</div></div>
+  <div class="group"><div class="r" style="border-radius:14px">md</div><div class="val">14px</div></div>
+  <div class="group"><div class="r" style="border-radius:18px">lg</div><div class="val">18px</div></div>
+  <div class="group"><div class="r" style="border-radius:9999px">pill</div><div class="val">9999px</div></div>
+  <div class="group"><div class="r" style="border-radius:50%">full</div><div class="val">circle</div></div>
+</div>
+<div style="padding:0 24px 20px;font-family:var(--font-body);font-size:11.5px;line-height:1.55;color:#555;max-width:780px;">
+  <p><b>Canonical scale:</b> <code>xs</code> 4 · <code>sm</code> 8 · <code>md</code> 14 · <code>lg</code> 18 · <code>pill</code> 9999. The Card primitive's glass surface uses <code>md</code> (14px) as of the 2026-05-19 glass-surface consolidation.</p>
+  <p><b>Component-specific radii:</b> <code>checkbox</code> 3px (used by Checkbox primitive only) · <code>input</code> 10px (used by Input primitive only). These exist alongside the canonical scale to match shipped component values.</p>
+  <p><b>Prefer <code>pill</code> (9999px) for all rounded UI elements</b> — circles, pills, dots, avatars, FABs, badges. The brand token produces a circle on symmetric (w=h) elements and a pill on asymmetric ones; it's always correct. <code>full</code> (50%) renders as an ellipse on non-square dimensions and is retained only for historical compatibility.</p>
+</div></body></html>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:#3B7A57;}
+  .card{padding:24px;display:flex;flex-direction:column;gap:10px;}
+  .row{display:flex;align-items:center;padding:10px 6px;border-bottom:1px solid rgba(255,255,255,0.1);gap:7px;color:#fff;font-family:var(--font-body);font-size:14px;}
+  .drag{color:rgba(255,255,255,0.35);font-size:14px;letter-spacing:-1px;}
+  .cb{width:17px;height:17px;border:1.8px solid rgba(255,255,255,0.75);border-radius:3px;flex-shrink:0;}
+  .cb.checked{background:rgba(255,255,255,0.3);border-color:rgba(255,255,255,0.5);position:relative;}
+  .cb.checked::after{content:"";position:absolute;left:3px;top:1px;width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg);}
+  .text{flex:1;}
+  .text.done{text-decoration:line-through;opacity:.45;}
+  .trash{color:rgba(255,255,255,0.45);}
+</style></head>
+<body><div class="card">
+  <div class="row"><span class="drag">⠿</span><span class="cb"></span><span class="text">Bread</span><svg width="14" height="16" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.6" class="trash"><polyline points="2 4 12 4"/><path d="M4 4V2h6v2"/><rect x="2.5" y="4" width="9" height="10" rx="1.5"/><line x1="5" y1="7" x2="5" y2="12"/><line x1="9" y1="7" x2="9" y2="12"/></svg></div>
+  <div class="row"><span class="drag">⠿</span><span class="cb checked"></span><span class="text done">Orange Juice</span><svg width="14" height="16" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.6" class="trash"><polyline points="2 4 12 4"/><path d="M4 4V2h6v2"/><rect x="2.5" y="4" width="9" height="10" rx="1.5"/><line x1="5" y1="7" x2="5" y2="12"/><line x1="9" y1="7" x2="9" y2="12"/></svg></div>
+  <div class="row"><span class="drag">⠿</span><span class="cb"></span><span class="text">Needed for Pancakes</span><span style="color:rgba(255,255,255,.65)">∨</span></div>
+</div></body></html>

@@ -1,0 +1,214 @@
+/* Focus Forest — Colors & Type
+ * Source-of-truth tokens for the Focus Forest brand.
+ * Fonts: Niramit (display) + Source Sans 3 (body) — loaded from Google Fonts.
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Niramit:wght@200;300;400;500;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap");
+
+:root {
+  /* ─── Brand colors ─── */
+  --ff-primary:        #3B7A57;  /* primary green — 60% of palette */
+  --ff-secondary:      #FFFFFF;  /* white — 30% */
+  --ff-yellow:         #F6AE2D;  /* accent CTA */
+  --ff-yellow-dark:    #EB9C0A;  /* hover/pressed yellow */
+  --ff-mist:           #F1F9E7;  /* soft pale-green highlights & illustrative fills */
+  --ff-sage:           #9CAA87;  /* muted sage */
+  --ff-black:          #0E0F0C;
+
+  /* Additional accents */
+  --ff-deep-forest:    #094934;  /* lock-screen / dark surfaces */
+  --ff-moss:           #7ABF94;  /* soft moss green — FAB pressed/active accent */
+  --ff-sky:            #92D3F0;  /* sky illustration / link-on-dark */
+  --ff-grey:           #979495;  /* meta text */
+  /* Tonal lighter siblings of --ff-grey — same neutral hue, higher luminance.
+   * Used for neutral, brand-agnostic surfaces like disabled controls. */
+  --color-grey-light:  #D4D2D3;  /* disabled button bg on light surfaces */
+  --color-grey-lighter:#E8E7E7;  /* disabled text / extra-light backgrounds */
+  --ff-error:          #AC111E;  /* destructive */
+  --ff-orange:         #D67B42;  /* warm illustration accent */
+
+  /* Tonal greens used in product UI */
+  /* (Lock-screen wallpaper is intentionally NOT a token — the OS owns that surface.) */
+
+  /* Removed (2026-05-19): the deprecated flat-green tokens
+   *   --ff-green-header (#4A9468)
+   *   --ff-green-card   (#52A070)
+   *   --ff-green-soft   (alias of --ff-moss)
+   *   --bg-elevated     (aliased --ff-green-card)
+   * Production uses translucent glass over --ff-primary; no consumer remained.
+   * The DS HTML preview files still use #4A9468 as a preview canvas color
+   * only (not a brand token). */
+
+  /* ─── Glassmorphism surfaces ───
+   * Each is a LAYERED technique, not a color: a translucent white linear
+   * gradient PLUS a backdrop-filter blur, sitting over the primary green
+   * canvas (#3B7A57). Apply with the matching --surface-*-bg /
+   * --surface-*-blur / --surface-*-border tokens; do not flatten to a hex. */
+
+  /* Top app header bar */
+  --surface-header-nav-bg:     linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%);
+  --surface-header-nav-blur:   blur(20px);
+  --surface-header-nav-border: 1px solid rgba(255,255,255,0.12);   /* used as border-bottom */
+
+  /* Glass card surface — canonical recipe (2026-05-19 consolidation).
+   * Single source of truth for ALL glass-card chrome in production:
+   * Home hero + teaser, Today section cards, Countdown screen cards.
+   * Previously three distinct recipes; collapsed to one for visual
+   * consistency. The Card primitive emits this token set. */
+  --surface-card-bg:           linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%);
+  --surface-card-blur:         blur(12px);
+  --surface-card-border:       1px solid rgba(255,255,255,0.20);
+  --surface-card-radius:       14px;
+
+  /* Bottom tab bar (same treatment as header nav) */
+  --surface-bottom-nav-bg:     linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%);
+  --surface-bottom-nav-blur:   blur(20px);
+  --surface-bottom-nav-border: 1px solid rgba(255,255,255,0.12);   /* used as border-top */
+
+  /* State tokens — applied transiently, not surfaces */
+  --state-fab-pressed:         var(--ff-moss);   /* FAB pressed/active state only */
+
+  /* Semantic surface roles */
+  --bg:                var(--ff-primary);
+  --bg-on-light:       var(--ff-secondary);
+  --fg:                var(--ff-secondary);
+  --fg-muted:          rgba(255,255,255,0.65);
+  --fg-on-light:       #111111;
+  --fg-on-light-muted: #555555;
+  --border-subtle:     rgba(255,255,255,0.18);
+  --divider:           rgba(255,255,255,0.10);
+
+  /* ─── Typography ─── */
+  --font-display: "Niramit", system-ui, sans-serif;
+  --font-body:    "Source Sans 3", system-ui, sans-serif;
+
+  /* Type scale (per spec sheet) */
+  --h1-size: 38px;  --h1-weight: 500;  --h1-lh: 1.15;
+  --h2-size: 30px;  --h2-weight: 500;  --h2-lh: 1.2;
+  --h3-size: 20px;  --h3-weight: 500;  --h3-lh: 1.3;
+  --h4-size: 16px;  --h4-weight: 600;  --h4-lh: 1.4;
+  --text-size: 14px; --text-weight: 400; --text-lh: 1.5;
+  --link-size: 14px;
+
+  /* List label — 16px Body Medium 500. BottomNav, Tabs, and list-row
+   * labels (to-dos, settings, agenda items). Distinct from
+   * --text-overline (11px), which is for tiny uppercase overlines
+   * and pill labels ("UP NEXT", "Now", AM/PM suffixes). */
+  --text-list-label-size:   16px;
+  --text-list-label-weight: 500;
+  --text-list-label-lh:     1;
+
+  /* Link color tokens — context-aware for WCAG AA (4.5:1).
+   * Always inherit link color from the SURFACE context:
+   *   light surface (white/mist)  -> var(--color-link-on-light)
+   *   dark  surface (green/forest) -> var(--color-link-on-dark)
+   */
+  --color-link-on-light: #0066CC;          /* ~6.3:1 on #FFFFFF */
+  --color-link-on-dark:  var(--ff-sky);    /* ~5.2:1 on #3B7A57 */
+
+  /* Spacing scale (4pt) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Radius — canonical scale */
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-pill: 9999px;
+  --r-full: 9999px;
+
+  /* Radius — component-specific (exist alongside the canonical scale to
+   * match shipped values; each is bound to a single component's spec). */
+  --r-checkbox: 3px;   /* Checkbox primitive border-radius */
+  --r-input:    10px;  /* Input primitive border-radius */
+  /* --r-glass and --r-card removed (2026-05-19): canonical glass-card
+   * radius is now 14px = --r-md. No remaining consumers. */
+
+  /* Shadows (used for FAB, cards, lock-screen notifs) */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.18);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.30);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.28);
+}
+
+/* ─── Semantic type styles ─── */
+h1, .ff-h1 {
+  font-family: var(--font-display);
+  font-size: var(--h1-size);
+  font-weight: var(--h1-weight);
+  line-height: var(--h1-lh);
+  letter-spacing: -0.5px;
+  color: var(--fg);
+}
+h2, .ff-h2 {
+  font-family: var(--font-display);
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  line-height: var(--h2-lh);
+  letter-spacing: -0.3px;
+  color: var(--fg);
+}
+h3, .ff-h3 {
+  font-family: var(--font-display);
+  font-size: var(--h3-size);
+  font-weight: var(--h3-weight);
+  line-height: var(--h3-lh);
+  color: var(--fg);
+}
+h4, .ff-h4 {
+  font-family: var(--font-display);
+  font-size: var(--h4-size);
+  font-weight: var(--h4-weight);
+  line-height: var(--h4-lh);
+  color: var(--fg);
+}
+p, .ff-text {
+  font-family: var(--font-body);
+  font-size: var(--text-size);
+  font-weight: var(--text-weight);
+  line-height: var(--text-lh);
+  color: var(--fg);
+}
+/* Default link styling assumes a DARK surface (the brand's primary green).
+ * Wrap or override on light surfaces with .ff-link--on-light. */
+a, .ff-link {
+  font-family: var(--font-body);
+  font-size: var(--link-size);
+  color: var(--color-link-on-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.ff-link--on-light { color: var(--color-link-on-light); }
+.ff-link--on-dark  { color: var(--color-link-on-dark); }
+.ff-meta {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+/* ─── Buttons ─── */
+.ff-btn {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: var(--r-pill);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+.ff-btn:active { transform: scale(0.96); }
+.ff-btn-primary { background: var(--ff-yellow); color: var(--ff-black); }
+.ff-btn-primary:hover { background: var(--ff-yellow-dark); }
+.ff-btn-secondary { background: var(--ff-yellow-dark); color: var(--ff-black); }
+.ff-btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--ff-secondary);
+  color: var(--ff-secondary);
+}

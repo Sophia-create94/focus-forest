@@ -1,0 +1,300 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css?v=type3"/>
+<style>
+  html,body{margin:0;padding:0;background:#fff;color:#111;font-family:var(--font-body);width:100%;}
+  .card{padding:20px 24px;box-sizing:border-box;width:100%;max-width:none;}
+  .row{min-width:0;}
+
+  /* Page header */
+  .head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px;}
+  .title{font-family:var(--font-display);font-weight:600;font-size:20px;color:#111;letter-spacing:-0.01em;}
+  .subtitle{font-family:var(--font-body);font-size:12px;color:#666;line-height:1.4;}
+
+  /* ── Group band ──
+     Each subsection sits in its own visually distinct zone with generous padding,
+     a colored leading stripe, and a stronger header so groups read as separate. */
+  .group{
+    margin-top:36px;
+    border:1px solid #eee;border-radius:14px;
+    background:#fcfcfc;
+    overflow:hidden;
+  }
+  .group:first-of-type{margin-top:24px;}
+  .group-display{border-left:4px solid #3B7A57;}     /* Niramit / display */
+  .group-body   {border-left:4px solid #6FA88B;}     /* Source Sans / body */
+  .group-ios    {border-left:4px solid #979495;}     /* SF Pro / iOS system */
+
+  .group-head{
+    display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+    padding:18px 24px 16px;
+    background:#fff;
+    border-bottom:1px solid #eee;
+  }
+  .group-num{
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;font-weight:700;
+    color:#999;letter-spacing:.08em;text-transform:uppercase;
+  }
+  .group-title{
+    font-family:var(--font-display);font-weight:600;font-size:18px;color:#111;letter-spacing:-0.005em;
+  }
+  .group-sub{
+    font-family:var(--font-body);font-size:12px;color:#666;line-height:1.45;
+  }
+
+  /* Token rows ── generous vertical breathing room.
+     Each row is a self-contained zone with no dividers between rows;
+     spacing alone does the separating work (matches Spacing/Radii density). */
+  .rows{padding:8px 24px 24px;}
+  .row{
+    display:grid;grid-template-columns:140px minmax(0,1fr) 180px;gap:24px;
+    align-items:center;
+    padding:24px 0;
+  }
+
+  /* Quiet supporting columns — sample is the anchor. */
+  .tok{
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:#888;
+    line-height:1.55;letter-spacing:0;
+    align-self:center;
+  }
+  .tok b{
+    display:block;color:#222;font-weight:700;font-size:11px;letter-spacing:0;
+    margin-bottom:3px;
+  }
+  .tok .meta{color:#aaa;font-size:9.5px;}
+
+  .use{
+    font-family:var(--font-body);font-size:11px;color:#888;line-height:1.5;
+    text-align:right;
+    align-self:center;
+  }
+  .use .label{color:#555;display:block;margin-bottom:3px;}
+  .use .spec{
+    display:block;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:9.5px;color:#aaa;
+    letter-spacing:0;
+  }
+
+  /* Sample column — the visual anchor. */
+  .sample{color:#111;min-width:0;}
+  .sample.clip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+  /* Sample type styles — one weight per token (UNCHANGED values) */
+  /* Display family */
+  .t-h1{font-family:var(--font-display);font-size:38px;font-weight:500;line-height:1.15;letter-spacing:-0.5px;}
+  .t-h2{font-family:var(--font-display);font-size:30px;font-weight:500;line-height:1.2;letter-spacing:-0.3px;}
+  .t-h3{font-family:var(--font-display);font-size:20px;font-weight:500;line-height:1.3;}
+  .t-h4{font-family:var(--font-display);font-size:16px;font-weight:600;line-height:1.4;}
+  .t-button{
+    font-family:var(--font-display);font-size:16px;font-weight:500;line-height:1;letter-spacing:0;
+    background:#F6AE2D;color:#1a1a1a;
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:14px 22px;border-radius:9999px;
+  }
+  /* Body family */
+  .t-list-label{font-family:var(--font-body);font-size:16px;font-weight:500;line-height:1;color:#222;}
+  .t-body{font-family:var(--font-body);font-size:14px;font-weight:400;line-height:1.5;}
+  .t-caption{font-family:var(--font-body);font-size:13px;font-weight:400;line-height:1.4;color:#555;}
+  .t-overline{font-family:var(--font-body);font-size:11px;font-weight:500;line-height:1;color:#222;letter-spacing:.02em;}
+
+  /* iOS group */
+  .t-ios{font-family:ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;color:#111;letter-spacing:0;}
+  .t-ios.flat{font-family:-apple-system, BlinkMacSystemFont, "SF Pro", "Helvetica Neue", system-ui, sans-serif;}
+  .t-ios-clock{font-size:64px;font-weight:300;line-height:1;letter-spacing:-0.02em;}
+  .t-ios-date{font-size:22px;font-weight:500;line-height:1.1;}
+  .t-ios-status-time{font-size:17px;font-weight:600;line-height:1;}
+  .t-ios-notif-title{font-size:15px;font-weight:600;line-height:1.25;}
+  .t-ios-notif-body{font-size:15px;font-weight:400;line-height:1.3;color:#333;}
+  .t-ios-action{font-size:17px;font-weight:400;line-height:1;color:#007AFF;}
+
+  /* iOS context preview surfaces */
+  .ios-surface{
+    display:inline-block;padding:6px 10px;border-radius:8px;
+    background:linear-gradient(180deg,#000 0%, #1c1c1e 100%);color:#fff;
+  }
+  .ios-surface .t-ios-clock,
+  .ios-surface .t-ios-date,
+  .ios-surface .t-ios-status-time{color:#fff;}
+  .ios-card{
+    display:inline-block;padding:8px 12px;border-radius:10px;
+    background:rgba(255,255,255,0.95);
+    box-shadow:0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .fallback-note{
+    margin-top:14px;padding:0 24px 22px;
+    font-family:var(--font-body);font-size:10.5px;color:#888;line-height:1.5;font-style:italic;
+  }
+
+  /* Footer notes — UNCHANGED copy */
+  .note{
+    margin-top:18px;
+    font-family:var(--font-body);font-size:11.5px;line-height:1.55;color:#444;
+    padding:12px 14px;background:#fafafa;border-left:3px solid #3B7A57;border-radius:2px;
+  }
+  .note + .note{margin-top:8px;border-left-color:#aaa;}
+  .note b{color:#111;font-weight:700;}
+  .note code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;background:#fff;padding:1px 5px;border-radius:3px;border:1px solid #eee;color:#0a4d2e;}
+  .note .h{font-family:var(--font-display);font-weight:600;font-size:13px;color:#111;display:block;margin-bottom:4px;}
+  .footer-rules{margin-top:36px;padding-top:18px;border-top:1px solid #eee;}
+</style></head>
+<body><div class="card">
+
+  <div class="head">
+    <div class="title">Type scale</div>
+    <div class="subtitle">Semantic tokens · Display + Body + iOS system · One weight per role</div>
+  </div>
+
+  <!-- ─── Group 1: Display family ─── -->
+  <section class="group group-display">
+    <header class="group-head">
+      <span class="group-num">01 · Display</span>
+      <span class="group-title">Display family</span>
+      <span class="group-sub">Niramit · headings, CTAs, FAB labels, emphatic UI</span>
+    </header>
+    <div class="rows">
+
+      <div class="row">
+        <div class="tok"><b>--text-h1</b><span class="meta">38 / Medium 500</span></div>
+        <div class="sample clip"><span class="t-h1">Welcome!</span></div>
+        <div class="use"><span class="label">Hero greeting (Home only — documented exception to the text-h3 screen-header standard)</span><span class="spec">lh 1.15 · -0.5px</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-h2</b><span class="meta">30 / Medium 500</span></div>
+        <div class="sample clip"><span class="t-h2">Grocery shopping</span></div>
+        <div class="use"><span class="label">Section headings</span><span class="spec">lh 1.2 · -0.3px</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-h3</b><span class="meta">20 / Medium 500</span></div>
+        <div class="sample clip"><span class="t-h3">Today</span></div>
+        <div class="use"><span class="label">Screen titles, card headings, subsection titles</span><span class="spec">lh 1.3</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-h4</b><span class="meta">16 / Semi-Bold 600</span></div>
+        <div class="sample clip"><span class="t-h4">Needed for Pancakes</span></div>
+        <div class="use"><span class="label">Small headings, list group labels</span><span class="spec">lh 1.4</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-button</b><span class="meta">16 / Medium 500</span></div>
+        <div class="sample"><span class="t-button">See your jungle here</span></div>
+        <div class="use"><span class="label">All CTAs and primary buttons</span><span class="spec">lh 1 · 0 letter-spacing</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Group 2: Body family ─── -->
+  <section class="group group-body">
+    <header class="group-head">
+      <span class="group-num">02 · Body</span>
+      <span class="group-title">Body family</span>
+      <span class="group-sub">Source Sans 3 · paragraphs, UI text, list-row labels, overlines</span>
+    </header>
+    <div class="rows">
+
+      <div class="row">
+        <div class="tok"><b>--text-list-label</b><span class="meta">16 / Medium 500</span></div>
+        <div class="sample"><span class="t-list-label">Home</span></div>
+        <div class="use"><span class="label">BottomNav, Tabs, list-row labels (to-dos, settings, agenda items)</span><span class="spec">lh 1</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-body</b><span class="meta">14 / Regular 400</span></div>
+        <div class="sample"><span class="t-body">3 of 5 trees grown this week. Keep going — you're on a streak.</span></div>
+        <div class="use"><span class="label">Default body, card content, list items, search input, timestamps</span><span class="spec">lh 1.5</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-caption</b><span class="meta">13 / Regular 400</span></div>
+        <div class="sample"><span class="t-caption">Tap to expand</span></div>
+        <div class="use"><span class="label">Helper text, captions, fine print</span><span class="spec">lh 1.4 · legibility-bumped from 12</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-overline</b><span class="meta">11 / Medium 500</span></div>
+        <div class="sample"><span class="t-overline">UP NEXT</span></div>
+        <div class="use"><span class="label">Tiny uppercase overlines + pills (Now, UP NEXT, day-circle Tue, WeekStrip initials)</span><span class="spec">lh 1 · .02em</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── Group 3: iOS system surfaces ─── -->
+  <section class="group group-ios">
+    <header class="group-head">
+      <span class="group-num">03 · System</span>
+      <span class="group-title">iOS system surfaces</span>
+      <span class="group-sub">SF Pro / SF Pro Rounded — OS-level only · not for app UI</span>
+    </header>
+    <div class="rows">
+
+      <div class="row">
+        <div class="tok"><b>--text-ios-clock</b><span class="meta">96 / Light 300<br/>SF Pro Rounded</span></div>
+        <div class="sample"><span class="ios-surface"><span class="t-ios t-ios-clock">9:41</span></span></div>
+        <div class="use"><span class="label">Lock screen clock</span><span class="spec">scaled preview · lh 1</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-ios-date</b><span class="meta">22 / Medium 500<br/>SF Pro Rounded</span></div>
+        <div class="sample"><span class="ios-surface"><span class="t-ios t-ios-date">Tuesday, March 11</span></span></div>
+        <div class="use"><span class="label">Lock screen date</span><span class="spec">lh 1.1</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-ios-status-time</b><span class="meta">17 / Semi-Bold 600<br/>SF Pro</span></div>
+        <div class="sample"><span class="ios-surface"><span class="t-ios flat t-ios-status-time">9:41</span></span></div>
+        <div class="use"><span class="label">iOS status bar time</span><span class="spec">lh 1</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-ios-notification-title</b><span class="meta">15 / Semi-Bold 600<br/>SF Pro</span></div>
+        <div class="sample"><span class="ios-card"><span class="t-ios flat t-ios-notif-title">Focus Forest</span></span></div>
+        <div class="use"><span class="label">iOS notification card title</span><span class="spec">lh 1.25</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-ios-notification-body</b><span class="meta">15 / Regular 400<br/>SF Pro</span></div>
+        <div class="sample"><span class="ios-card"><span class="t-ios flat t-ios-notif-body">Time for grocery shopping — your list is ready.</span></span></div>
+        <div class="use"><span class="label">iOS notification card body</span><span class="spec">lh 1.3</span></div>
+      </div>
+
+      <div class="row">
+        <div class="tok"><b>--text-ios-action</b><span class="meta">17 / Regular 400<br/>SF Pro · #007AFF</span></div>
+        <div class="sample"><span class="ios-card"><span class="t-ios flat t-ios-action">Mark as done</span></span></div>
+        <div class="use"><span class="label">iOS notification action</span><span class="spec">color #007AFF · lh 1</span></div>
+      </div>
+
+    </div>
+    <div class="fallback-note">
+      Renders in actual SF Pro on Apple devices and Safari/Mac browsers; falls back to system-ui elsewhere.
+    </div>
+  </section>
+
+  <!-- ─── Type scale rules (UNCHANGED) ─── -->
+  <div class="footer-rules">
+    <div class="note">
+      <span class="h">Type scale rules</span>
+      <b>One token per role.</b> Each token defines a single weight, size, and use case — don't apply Niramit Light at 38px to body text, or Source Sans Semi-Bold at 16px to a heading. The system intentionally constrains weight per size to maintain visual rhythm.
+    </div>
+    <div class="note">
+      <b>Font family signals hierarchy, not just size.</b> A heading and a body paragraph can both be 16px — the heading uses Niramit Semi-Bold (display family), the body uses Source Sans Regular (body family). Family + weight differentiate them.
+    </div>
+    <div class="note">
+      <b>iOS system tokens are off-limits for app UI.</b> Group 03 tokens render only on OS-controlled surfaces (lock screen, system notifications). Inside the Focus Forest app, only Groups 01 and 02 apply.
+    </div>
+    <div class="note">
+      <b>Line-height &amp; letter-spacing.</b> Defaults: line-height <code>1.4</code> for body tokens, <code>1.2</code> for display/heading tokens, <code>1.0</code> for buttons. Letter-spacing <code>0</code> for all tokens unless noted.
+    </div>
+    <div class="note">
+      <b>Font-weight scale.</b> Token defaults use <code>300</code> (Display), <code>400</code> (Body Regular), <code>500</code> (Medium — h1-h3, button, overline, list-label), and <code>600</code> (h4). Weight <code>700</code> (Bold) is reserved for the brand logo glyph only (see <code>components-app-header.html</code>) and is not a general token.
+    </div>
+  </div>
+
+</div></body></html>
+</content>
+<subtitle>Roomier rows, banded subsections, sample as anchor</subtitle>

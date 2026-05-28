@@ -1,0 +1,100 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<style>
+  :root {
+    --sf-rounded: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    --sf-pro: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    --ios-blue: #007AFF;
+    --ios-divider: rgba(60, 60, 67, 0.18);
+  }
+  /* Lock-screen wallpaper is NOT a Focus Forest design token.
+   * The wallpaper shown is a DAWN / SUNRISE GRADIENT placeholder representing a
+   * generic, modern OS context. The only Focus Forest-owned element on the lock
+   * screen is the notification card content. Wallpapers are user-controlled at
+   * the OS level. Stops are darkened ~10% from the original spec so white system
+   * UI (clock, date, status bar, lock icon) clears ~4.5:1 contrast against the
+   * darkest portion of the gradient. */
+  html,body{margin:0;padding:0;font-family:var(--sf-pro);}
+  body{
+    background:
+      linear-gradient(180deg,
+        #DB9590 0%,    /* warm peach (top)    — ~10% darker than #F4A6A0 */
+        #B494BF 50%,   /* gentle lavender     — ~10% darker than #C8A4D4 */
+        #52729C 100%   /* muted dusk blue     — ~10% darker than #5B7FAE; ~4.5:1 vs #fff */
+      );
+  }
+  .frame{position:relative;padding:14px 16px 0;min-height:560px;}
+
+  /* iOS-style text shadow on white system UI — keeps clock/date/status bar legible
+     against bright wallpaper stops without darkening the whole gradient. */
+  .status, .date, .clock{text-shadow:0 1px 2px rgba(0,0,0,0.25);}
+
+  /* Status bar */
+  .status{display:flex;justify-content:space-between;align-items:center;padding:0 6px 12px;color:#fff;}
+  .status-time{font-family:var(--sf-pro);font-size:17px;font-weight:600;letter-spacing:-0.3px;}
+  .status-icons{display:flex;align-items:center;gap:5px;}
+
+  /* Lock icon */
+  .lock-icon{display:flex;justify-content:center;margin:2px 0 6px;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.25));}
+
+  /* Date + time (iOS order: date ABOVE clock) */
+  .date{text-align:center;color:#fff;font-family:var(--sf-rounded);font-size:22px;font-weight:500;line-height:1.2;margin-bottom:14px;}
+  .clock{text-align:center;color:#fff;font-family:var(--sf-rounded);font-size:96px;font-weight:300;letter-spacing:0;line-height:1;margin-bottom:22px;}
+
+  /* Notification card */
+  .notif{background:rgba(255,255,255,0.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:18px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+  .notif-head{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+  .app-icon{width:24px;height:24px;border-radius:6px;background:#3B7A57;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--sf-rounded);font-size:10px;font-weight:700;flex-shrink:0;}
+  .app-name{font-family:var(--sf-pro);font-size:13px;font-weight:500;color:rgba(60,60,67,0.6);text-transform:uppercase;letter-spacing:0.3px;flex:1;}
+  .ts{font-family:var(--sf-pro);font-size:13px;color:rgba(60,60,67,0.6);}
+  .notif-title{font-family:var(--sf-pro);font-size:15px;font-weight:600;color:rgba(0,0,0,0.9);margin-bottom:2px;line-height:1.3;}
+  .notif-body{font-family:var(--sf-pro);font-size:15px;color:rgba(0,0,0,0.8);line-height:1.35;}
+
+  /* Action stack */
+  .actions{margin-top:8px;background:rgba(255,255,255,0.85);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+  .action{display:block;width:100%;padding:0 16px;height:57px;background:transparent;border:none;border-bottom:0.5px solid var(--ios-divider);font-family:var(--sf-pro);font-size:17px;color:var(--ios-blue);text-align:center;cursor:pointer;}
+  .action:last-child{border-bottom:none;}
+
+  /* Bottom system controls */
+  .util-flash{position:absolute;bottom:80px;left:24px;width:50px;height:50px;border-radius:50%;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;}
+  .util-cam{position:absolute;bottom:80px;right:24px;width:50px;height:50px;border-radius:50%;background:rgba(0,0,0,0.25);display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;}
+  .home-indicator{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:134px;height:5px;background:rgba(255,255,255,0.9);border-radius:3px;}
+</style></head>
+<body><div class="frame">
+  <div class="status">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><rect x="0" y="6" width="3" height="5" rx="0.7"/><rect x="4.5" y="4" width="3" height="7" rx="0.7"/><rect x="9" y="2" width="3" height="9" rx="0.7"/><rect x="13.5" y="0" width="3" height="11" rx="0.7"/></svg>
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="#fff"><path d="M7.5 9.4a1.1 1.1 0 110 2.2 1.1 1.1 0 010-2.2zM3.3 5.8a5.9 5.9 0 018.4 0l-1.3 1.3a4.1 4.1 0 00-5.8 0L3.3 5.8zM.5 3a9.7 9.7 0 0114 0l-1.3 1.3a7.8 7.8 0 00-11.4 0L.5 3z"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="#fff" stroke-opacity="0.4" stroke-width="1"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="#fff"/><path d="M23 4v4a1.5 1.5 0 000-4z" fill="#fff" fill-opacity="0.4"/></svg>
+    </div>
+  </div>
+  <div class="lock-icon">
+    <svg width="14" height="17" viewBox="0 0 14 17" fill="#fff"><path d="M7 0a4 4 0 014 4v3h1.2c.4 0 .8.4.8.9v8c0 .5-.4.9-.8.9H1.8c-.4 0-.8-.4-.8-.9V8c0-.5.4-.9.8-.9H3V4a4 4 0 014-4zm0 1.5A2.5 2.5 0 004.5 4v3h5V4A2.5 2.5 0 007 1.5z"/></svg>
+  </div>
+  <div class="date">Monday, June 3</div>
+  <div class="clock">9:41</div>
+
+  <div class="notif">
+    <div class="notif-head">
+      <div class="app-icon">ff</div>
+      <span class="app-name">focusforest</span>
+      <span class="ts">now</span>
+    </div>
+    <div class="notif-title">Time for sports</div>
+    <div class="notif-body">You wanted to do sports today. Please choose from the below.</div>
+  </div>
+  <div class="actions">
+    <button class="action">I will do it later</button>
+    <button class="action">Start tracking</button>
+    <button class="action">I am done</button>
+  </div>
+
+  <button class="util-flash" aria-label="Flashlight">
+    <svg width="23" height="23" viewBox="0 0 22 22" fill="#fff"><path d="M7.4 5h7.2l-1.1-2.4a1.2 1.2 0 00-1.1-.7H9.6a1.2 1.2 0 00-1.1.7L7.4 5zM6.8 6.4a.9.9 0 00-.3.7v1.5c0 .4.2.7.5.9l.6.3v9.6c0 1 .8 1.7 1.7 1.7h3.4c1 0 1.7-.8 1.7-1.7V9.8l.6-.3c.3-.2.5-.5.5-.9V7.1a.9.9 0 00-.3-.7H6.8z"/></svg>
+  </button>
+  <button class="util-cam" aria-label="Camera">
+    <svg width="22" height="20" viewBox="0 0 22 20" fill="#fff"><path d="M3 5h2.8l1.5-2.5h7.4L16.2 5H19a2 2 0 012 2v9a2 2 0 01-2 2H3a2 2 0 01-2-2V7a2 2 0 012-2zm8 3.5a4 4 0 100 8 4 4 0 000-8z"/></svg>
+  </button>
+  <div class="home-indicator"></div>
+</div></body></html>

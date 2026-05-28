@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/>
+<title>Focus Forest — components / week-strip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Niramit:wght@300;400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"/>
+<style>
+  :root {
+    --font-display: 'Niramit', system-ui, sans-serif;
+    --font-body: 'Source Sans 3', system-ui, sans-serif;
+    --ff-primary: #3B7A57;
+    --ff-yellow: #F6AE2D;
+    --ff-cat-work: #92D3F0;
+    --ff-cat-personal: #F6AE2D;
+    --ff-cat-health: #7ABF94;
+    --ff-cat-work-on-accent: #1A3A5C;
+    --ff-cat-personal-on-accent: #FFFFFF;
+    --ff-cat-health-on-accent: #2F5C40;
+  }
+  html, body { margin:0; padding:0; background:#F5F4EF; font-family:var(--font-body); color:#222; }
+  .page { padding:40px 32px 80px; max-width:980px; margin:0 auto; }
+
+  .header-block { margin-bottom:36px; }
+  .crumb { font-family:var(--font-body); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#999; margin:0 0 6px; }
+  .page-title { font-family:var(--font-display); font-weight:500; font-size:28px; margin:0 0 10px; color:#111; letter-spacing:-0.01em; }
+  .page-sub { font-size:14px; color:#555; margin:0; max-width:680px; line-height:1.6; }
+
+  .section { margin-top:40px; }
+  .section-title { font-family:var(--font-display); font-weight:600; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:#888; margin:0 0 14px; }
+
+  /* ── Canvas (brand green) ── */
+  .canvas {
+    background:var(--ff-primary);
+    border-radius:18px;
+    padding:22px 16px 20px;
+  }
+  .canvas + .canvas { margin-top:14px; }
+  .canvas-label {
+    font-family:var(--font-body); font-size:10px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,0.62);
+    margin:0 0 10px 4px;
+  }
+  .month {
+    font-family:var(--font-display); font-weight:500; font-size:20px; color:#fff;
+    margin:0 0 12px 4px; letter-spacing:-0.01em;
+  }
+
+  /* ── Week strip ── */
+  .strip {
+    display:grid; grid-template-columns:repeat(7, 1fr); gap:6px;
+  }
+  .day {
+    background:rgba(255,255,255,0.10);
+    border-radius:14px;
+    padding:11px 0 10px;
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    color:#fff;
+    position:relative;
+    min-height:62px; box-sizing:border-box;
+    border:1px solid rgba(255,255,255,0.04);
+  }
+  .day .dow {
+    font-family:var(--font-body); font-size:10.5px; font-weight:600;
+    letter-spacing:.03em; color:rgba(255,255,255,0.72);
+  }
+  .day .num {
+    font-family:var(--font-display); font-weight:600; font-size:17px; color:#fff;
+    line-height:1.05;
+  }
+  .day.today {
+    background:var(--ff-yellow);
+    border-color:var(--ff-yellow);
+  }
+  .day.today .dow { color:rgba(0,0,0,0.62); }
+  .day.today .num { color:#1a1a1a; }
+  .multi-dots {
+    display:flex; gap:3px; margin-top:3px;
+    height:5px;
+  }
+  .multi-dots .d {
+    width:5px; height:5px; border-radius:50%;
+  }
+  .d.work     { background:var(--ff-cat-work); }
+  .d.personal { background:var(--ff-cat-personal); }
+  .d.health   { background:var(--ff-cat-health); }
+  .day.today .d.work     { background:var(--ff-cat-work-on-accent); }
+  .day.today .d.personal { background:var(--ff-cat-personal-on-accent); }
+  .day.today .d.health   { background:var(--ff-cat-health-on-accent); }
+
+  /* ── Spec table ── */
+  .spec {
+    background:#fff; border:1px solid #E2E2D6; border-radius:14px;
+    padding:18px 22px; margin-top:18px;
+  }
+  .spec dl { display:grid; grid-template-columns:160px 1fr; gap:10px 18px; margin:0; font-size:13px; }
+  .spec dt { font-family:var(--font-display); font-weight:600; color:#111; }
+  .spec dd { margin:0; color:#444; line-height:1.55; }
+  .spec dd code { font-family:'SF Mono', Menlo, monospace; font-size:12px; background:#F1F0EA; padding:1px 5px; border-radius:4px; }
+
+  /* ── Token swatches ── */
+  .tokens {
+    display:grid; grid-template-columns:repeat(2, 1fr); gap:10px;
+    margin-top:14px;
+  }
+  .swatch {
+    background:#fff; border:1px solid #E2E2D6; border-radius:10px;
+    padding:12px 14px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .swatch-chip { width:24px; height:24px; border-radius:50%; flex:none; box-shadow:0 0 0 1px rgba(0,0,0,0.06); }
+  .swatch-info { display:flex; flex-direction:column; gap:1px; }
+  .swatch-name { font-family:var(--font-display); font-weight:600; font-size:12px; color:#111; }
+  .swatch-hex  { font-family:'SF Mono', Menlo, monospace; font-size:11px; color:#666; }
+
+  /* ── Rules list ── */
+  .rules { background:#fff; border:1px solid #E2E2D6; border-radius:14px; padding:6px 22px 10px; margin-top:18px; }
+  .rules ol { padding-left:20px; }
+  .rules li { font-size:13px; line-height:1.7; color:#333; margin:6px 0; }
+  .rules li code { font-family:'SF Mono', Menlo, monospace; font-size:12px; background:#F1F0EA; padding:1px 5px; border-radius:4px; }
+
+  /* small annotation labels next to canvas examples */
+  .ex-label {
+    font-family:var(--font-body); font-size:11px; font-weight:600;
+    color:#999; margin:14px 0 6px 4px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .ex-label::before { content:""; width:18px; height:1px; background:#CDCDC0; }
+
+</style></head>
+<body>
+
+<div class="page">
+
+  <div class="header-block">
+    <p class="crumb">Components / Plans / Calendar</p>
+    <h1 class="page-title">Week strip</h1>
+    <p class="page-sub">Seven-day pill row used as a date picker at the top of the Calendar sub-tab. Every day is equally readable and tappable — past, present, future, with or without events. Small category-coloured dots below each date number indicate which categories of events exist on that day.</p>
+  </div>
+
+  <!-- ─── BEHAVIOUR EXAMPLES ─── -->
+  <div class="section">
+    <h2 class="section-title">Default state · Monday is today</h2>
+    <div class="canvas">
+      <p class="month">May 2026</p>
+      <div class="strip">
+        <div class="day"><span class="dow">S</span><span class="num">17</span><div class="multi-dots"></div></div>
+        <div class="day today"><span class="dow">M</span><span class="num">18</span><div class="multi-dots"><span class="d work"></span><span class="d personal"></span><span class="d health"></span></div></div>
+        <div class="day"><span class="dow">T</span><span class="num">19</span><div class="multi-dots"><span class="d work"></span></div></div>
+        <div class="day"><span class="dow">W</span><span class="num">20</span><div class="multi-dots"><span class="d work"></span><span class="d health"></span></div></div>
+        <div class="day"><span class="dow">T</span><span class="num">21</span><div class="multi-dots"></div></div>
+        <div class="day"><span class="dow">F</span><span class="num">22</span><div class="multi-dots"><span class="d personal"></span></div></div>
+        <div class="day"><span class="dow">S</span><span class="num">23</span><div class="multi-dots"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── EDGE CASES ─── -->
+  <div class="section">
+    <h2 class="section-title">Edge cases</h2>
+
+    <p class="ex-label">All days have events, varying mixes</p>
+    <div class="canvas">
+      <div class="strip">
+        <div class="day"><span class="dow">M</span><span class="num">04</span><div class="multi-dots"><span class="d work"></span></div></div>
+        <div class="day"><span class="dow">T</span><span class="num">05</span><div class="multi-dots"><span class="d work"></span><span class="d personal"></span></div></div>
+        <div class="day"><span class="dow">W</span><span class="num">06</span><div class="multi-dots"><span class="d personal"></span></div></div>
+        <div class="day"><span class="dow">T</span><span class="num">07</span><div class="multi-dots"><span class="d health"></span></div></div>
+        <div class="day"><span class="dow">F</span><span class="num">08</span><div class="multi-dots"><span class="d work"></span><span class="d personal"></span><span class="d health"></span></div></div>
+        <div class="day"><span class="dow">S</span><span class="num">09</span><div class="multi-dots"><span class="d personal"></span></div></div>
+        <div class="day"><span class="dow">S</span><span class="num">10</span><div class="multi-dots"><span class="d health"></span></div></div>
+      </div>
+    </div>
+
+    <p class="ex-label">All days empty (no events scheduled this week)</p>
+    <div class="canvas">
+      <div class="strip">
+        <div class="day"><span class="dow">M</span><span class="num">11</span><div class="multi-dots"></div></div>
+        <div class="day"><span class="dow">T</span><span class="num">12</span><div class="multi-dots"></div></div>
+        <div class="day"><span class="dow">W</span><span class="num">13</span><div class="multi-dots"></div></div>
+        <div class="day"><span class="dow">T</span><span class="num">14</span><div class="multi-dots"></div></div>
+        <div class="day"><span class="dow">F</span><span class="num">15</span><div class="multi-dots"></div></div>
+        <div class="day"><span class="dow">S</span><span class="num">16</span><div class="multi-dots"></div></div>
+        <div class="day"><span class="dow">S</span><span class="num">17</span><div class="multi-dots"></div></div>
+      </div>
+    </div>
+
+    <p class="ex-label">Today is empty, but the week is busy</p>
+    <div class="canvas">
+      <div class="strip">
+        <div class="day"><span class="dow">M</span><span class="num">25</span><div class="multi-dots"><span class="d work"></span></div></div>
+        <div class="day today"><span class="dow">T</span><span class="num">26</span><div class="multi-dots"></div></div>
+        <div class="day"><span class="dow">W</span><span class="num">27</span><div class="multi-dots"><span class="d work"></span><span class="d personal"></span></div></div>
+        <div class="day"><span class="dow">T</span><span class="num">28</span><div class="multi-dots"><span class="d health"></span></div></div>
+        <div class="day"><span class="dow">F</span><span class="num">29</span><div class="multi-dots"><span class="d work"></span></div></div>
+        <div class="day"><span class="dow">S</span><span class="num">30</span><div class="multi-dots"><span class="d personal"></span></div></div>
+        <div class="day"><span class="dow">S</span><span class="num">31</span><div class="multi-dots"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── RULES ─── -->
+  <div class="section">
+    <h2 class="section-title">Rules</h2>
+    <div class="rules">
+      <ol>
+        <li>Every day pill renders with the same background <code>rgba(255,255,255,0.10)</code>, same text colour, same border. No muted/disabled treatment for days without events — every day is tappable.</li>
+        <li>Each pill always reserves a 5px-tall indicator row with <code>margin-top: 3px</code>, even on empty days. This keeps card heights consistent across the row.</li>
+        <li>On days with events, render up to 3 dots (5×5px, fully round, 3px gap between dots). Each dot represents one <i>unique</i> category present that day.</li>
+        <li>Dot order is fixed: <b>work → personal → health</b>. Never re-order based on event count or alphabetisation.</li>
+        <li>If a day has more than 3 unique categories (impossible today, but defensive), cap at 3.</li>
+        <li>On the active/today pill (yellow background), dot colours switch to the <code>-on-accent</code> variants for legibility. The <code>personal</code> dot becomes white because yellow-on-yellow would vanish.</li>
+        <li>Events with no category field render no dot. They count toward "the day has events" only if accompanied by at least one categorised event. Treat uncategorised as benign, not as an error.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ─── TOKENS ─── -->
+  <div class="section">
+    <h2 class="section-title">Tokens</h2>
+    <p style="margin:0 0 10px; font-size:13px; color:#555;">Defined in <code style="font-family:'SF Mono', Menlo, monospace; font-size:12px; background:#F1F0EA; padding:1px 5px; border-radius:4px;">app/globals.css</code> under <code style="font-family:'SF Mono', Menlo, monospace; font-size:12px; background:#F1F0EA; padding:1px 5px; border-radius:4px;">:root</code>. Used directly via <code style="font-family:'SF Mono', Menlo, monospace; font-size:12px; background:#F1F0EA; padding:1px 5px; border-radius:4px;">var(--ff-cat-*)</code> in inline style on the dot element — not as Tailwind-generated <code style="font-family:'SF Mono', Menlo, monospace; font-size:12px; background:#F1F0EA; padding:1px 5px; border-radius:4px;">bg-*</code> classes — to avoid Tailwind v4 theme-registration issues.</p>
+    <div class="tokens">
+      <div class="swatch"><div class="swatch-chip" style="background:#92D3F0"></div><div class="swatch-info"><div class="swatch-name">--ff-cat-work</div><div class="swatch-hex">#92D3F0</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#1A3A5C"></div><div class="swatch-info"><div class="swatch-name">--ff-cat-work-on-accent</div><div class="swatch-hex">#1A3A5C</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#F6AE2D"></div><div class="swatch-info"><div class="swatch-name">--ff-cat-personal</div><div class="swatch-hex">#F6AE2D</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#FFFFFF; border:1px solid #ddd"></div><div class="swatch-info"><div class="swatch-name">--ff-cat-personal-on-accent</div><div class="swatch-hex">#FFFFFF</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#7ABF94"></div><div class="swatch-info"><div class="swatch-name">--ff-cat-health</div><div class="swatch-hex">#7ABF94</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#2F5C40"></div><div class="swatch-info"><div class="swatch-name">--ff-cat-health-on-accent</div><div class="swatch-hex">#2F5C40</div></div></div>
+    </div>
+  </div>
+
+  <!-- ─── DATA SHAPE ─── -->
+  <div class="section">
+    <h2 class="section-title">Data shape</h2>
+    <div class="spec">
+      <dl>
+        <dt>Event item</dt>
+        <dd><code>{ time: string; title: string; category?: 'work' | 'personal' | 'health' }</code> — <code>category</code> is optional.</dd>
+        <dt>Day item</dt>
+        <dd><code>{ dow: string; num: number; isToday?: boolean; items: EventItem[] }</code></dd>
+        <dt>Categories derivation</dt>
+        <dd>Compute at render time: <code>const cats = unique(day.items.map(i =&gt; i.category).filter(Boolean))</code>, then sort by <code>CATEGORY_ORDER = ['work','personal','health']</code>.</dd>
+        <dt>Shared types</dt>
+        <dd><code>lib/categories.ts</code> exports <code>EventCategory</code> and <code>CATEGORY_ORDER</code>. Reuse on the Today screen and on To-do/Countdown rows when those adopt the system.</dd>
+      </dl>
+    </div>
+  </div>
+
+</div>
+
+</body></html>

@@ -1,0 +1,384 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css?v=btn6"/>
+<style>
+  html,body{margin:0;padding:0;background:#fff;font-family:var(--font-body);color:#111;}
+  .wrap{padding:22px 24px;display:flex;flex-direction:column;gap:18px;box-sizing:border-box;}
+
+  /* ── Section heads ── */
+  .section-head{display:flex;align-items:baseline;gap:10px;border-top:1px solid #eee;padding-top:14px;}
+  .section-head:first-child{border-top:none;padding-top:0;}
+  .section-title{font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#222;}
+  .section-sub{font-size:11px;color:#777;}
+
+  /* ── Matrix ── */
+  .matrix{display:grid;grid-template-columns:104px repeat(5, minmax(0,1fr));gap:0;border:1px solid #eee;border-radius:10px;overflow:hidden;}
+  .matrix > .cell{padding:14px 8px;border-right:1px solid #eee;border-top:1px solid #eee;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:104px;min-width:0;overflow:hidden;}
+  .matrix > .cell:nth-child(6n+1){border-right:1px solid #eee;}      /* row labels */
+  .matrix > .cell:nth-child(6n){border-right:none;}                  /* last col */
+  .matrix > .cell:nth-child(-n+6){border-top:none;}                  /* header row */
+
+  /* Quiet the supporting state columns (Hover / Focus / Disabled).
+     Default and Pressed (cols 2 and 4 of the data area = nth-child 8 and 10
+     within the row) read at full weight; the rest recede. */
+  .matrix > .cell.col-quiet{background:#fbfbfb;}
+  .matrix > .cell.col-quiet .state-cap{color:#999;}
+  .matrix .col-head.col-quiet{color:#888;background:#f4f4f4;}
+
+  /* Ghost row is already a low-contrast variant (transparent + 1.5px white border).
+     It cannot be quieted further without disappearing — so the col-quiet treatment
+     does NOT apply to ghost cells. They keep the full green canvas at full button weight. */
+  .matrix .cell.ghost-row{background:#3B7A57 !important;}
+  .matrix .cell.ghost-row.col-quiet{background:#3B7A57 !important;}
+
+  /* Buttons inside the matrix are visual reference only — scaled down so they
+     fit comfortably inside cells without overflowing. The Spec card below
+     shows the production-size button. */
+  .matrix .btn{
+    transform:scale(0.78);transform-origin:center;
+    min-width:0;          /* override base 120px so cells can size to content */
+  }
+  .matrix .col-quiet .btn{transform:scale(0.74);opacity:0.78;}
+  /* Ghost row exception — keep full visibility regardless of col-quiet. */
+  .matrix .ghost-row .btn{transform:scale(0.78);opacity:1;}
+
+  .col-head{font-family:var(--font-body);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#222;background:#fafafa;}
+  .row-label{align-items:flex-start !important;justify-content:center !important;background:#fafafa;padding:14px 12px !important;}
+  .row-label .name{font-family:var(--font-display);font-size:13px;font-weight:600;color:#111;}
+  .row-label .meta{font-family:var(--font-body);font-size:10px;color:#777;line-height:1.4;}
+  .row-label.on-green{background:#3B7A57;}
+  .row-label.on-green .name{color:#fff;}
+  .row-label.on-green .meta{color:rgba(255,255,255,.75);}
+  .state-cap{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:9.5px;color:#666;line-height:1.4;text-align:center;}
+  .ghost-row .state-cap{color:rgba(255,255,255,.7);}
+
+  /* ── Button base — production spec ──
+     52px tall · 16px horiz padding · 14px top / 18px bottom (asymmetric for optical centering)
+     min-width 120px · max-width 280px · full pill radius
+     Niramit Medium 500 · 16px · letter-spacing 0 · line-height 1 · center-aligned
+     transition: all 150ms ease-out */
+  .btn{
+    font-family:var(--font-display);font-weight:500;font-size:16px;letter-spacing:0;line-height:1;
+    text-align:center;
+    height:52px;width:auto;min-width:120px;max-width:280px;padding:14px 16px 18px;
+    border-radius:9999px;border:none;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    transition:all 150ms ease-out;
+    white-space:nowrap;box-sizing:border-box;
+  }
+
+  /* Primary — Yellow */
+  .btn-primary{background:#F6AE2D;color:#0E0F0C;box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+  .btn-primary.is-hover{background:#E29A28;box-shadow:0 4px 12px rgba(0,0,0,0.15);}     /* 5% darker than #F6AE2D */
+  .btn-primary.is-pressed{background:#EB9C0A;box-shadow:none;}                          /* Yellow Dark, no shadow */
+  .btn-primary.is-focus{outline:2px solid #F6AE2D;outline-offset:2px;box-shadow:none;}
+  .btn-primary.is-disabled{background:#D4D2D3;color:rgba(0,0,0,0.4);box-shadow:none;cursor:not-allowed;}
+
+  /* Secondary — Yellow Dark */
+  .btn-secondary{background:#EB9C0A;color:#0E0F0C;box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+  .btn-secondary.is-hover{background:#D78A07;box-shadow:0 4px 12px rgba(0,0,0,0.15);}   /* 5% darker than #EB9C0A */
+  .btn-secondary.is-pressed{background:#C97D08;box-shadow:none;}                        /* darker amber */
+  .btn-secondary.is-focus{outline:2px solid #F6AE2D;outline-offset:2px;box-shadow:none;}
+  .btn-secondary.is-disabled{background:#D4D2D3;color:rgba(0,0,0,0.4);box-shadow:none;cursor:not-allowed;}
+
+  /* Ghost — transparent on green canvas, no shadow at any state */
+  .btn-ghost{
+    background:transparent;color:#fff;
+    border:1.5px solid #fff;                       /* white 100% opacity */
+    padding:12.5px 14.5px 16.5px;                  /* 1.5px border eats into padding to keep 52px box; bottom-heavy mirrors filled variants */
+  }
+  .btn-ghost.is-hover{background:rgba(255,255,255,0.08);}
+  .btn-ghost.is-pressed{background:rgba(255,255,255,0.15);}
+  .btn-ghost.is-focus{outline:2px solid #F6AE2D;outline-offset:2px;}
+  .btn-ghost.is-disabled{
+    background:transparent;
+    border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.3);
+    cursor:not-allowed;
+  }
+
+  /* ── Icon-button row ── */
+  .icon-row{
+    display:grid;grid-template-columns:repeat(3, minmax(0,1fr));gap:14px;
+    border:1px solid #eee;border-radius:10px;overflow:hidden;
+  }
+  .icon-cell{padding:18px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;background:#fafafa;}
+  .icon-cell.on-green{background:#3B7A57;}
+  .icon-cell .cap{font-family:var(--font-body);font-size:10.5px;color:#666;}
+  .icon-cell.on-green .cap{color:rgba(255,255,255,.8);}
+
+  /* ── Usage rule ── */
+  .rule{
+    font-size:11px;line-height:1.55;color:#444;
+    padding:12px 14px;background:#fafafa;border-left:3px solid #F6AE2D;border-radius:2px;
+  }
+  .rule b{color:#222;font-weight:700;}
+  .rule code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;background:#fff;padding:1px 5px;border-radius:3px;border:1px solid #eee;}
+
+  /* ── Spec card — annotated default sample ── */
+  .spec-card{
+    border:1px solid #eee;border-radius:10px;background:#fff;
+    display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1.2fr);gap:0;overflow:hidden;
+  }
+  .spec-stage{
+    background:
+      linear-gradient(0deg, rgba(0,0,0,0.02), rgba(0,0,0,0.02)),
+      repeating-linear-gradient(0deg, transparent 0 7px, rgba(0,0,0,0.04) 7px 8px),
+      repeating-linear-gradient(90deg, transparent 0 7px, rgba(0,0,0,0.04) 7px 8px),
+      #fafafa;
+    padding:48px 36px;display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .spec-btn-wrap{position:relative;display:inline-block;}
+  .spec-btn-wrap .btn{position:relative;z-index:2;}
+  /* Outer dimension overlay — dashed magenta box matches the 52px box */
+  .dim-box{
+    position:absolute;inset:-2px;border:1px dashed #C7398A;border-radius:9999px;pointer-events:none;
+  }
+  /* Inner padding indicator — asymmetric inset matching real button padding (14 top / 18 bottom / 16 horiz) */
+  .pad-box{
+    position:absolute;top:14px;bottom:18px;left:16px;right:16px;border:1px dashed rgba(199,57,138,0.5);border-radius:9999px;pointer-events:none;
+  }
+  /* Measurement labels */
+  .dim-h{
+    position:absolute;top:50%;right:-44px;transform:translateY(-50%);
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;font-weight:600;color:#C7398A;
+    display:flex;align-items:center;gap:4px;
+  }
+  .dim-h::before{content:"";width:1px;height:52px;background:#C7398A;display:block;}
+  .dim-w{
+    position:absolute;left:0;right:0;bottom:-22px;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;font-weight:600;color:#C7398A;text-align:center;
+  }
+  .dim-r{
+    position:absolute;top:-6px;left:0;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;font-weight:600;color:#C7398A;
+    transform:translate(-105%, -50%);
+  }
+  .spec-list{
+    padding:18px 20px;display:flex;flex-direction:column;gap:14px;background:#fff;
+    border-left:1px solid #eee;
+  }
+  .spec-row{display:flex;flex-direction:column;gap:3px;}
+  .spec-row .k{font-family:var(--font-body);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#666;}
+  .spec-row .v{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:#111;line-height:1.5;}
+  .spec-row .v b{font-weight:600;color:#0E0F0C;}
+
+  /* In-context example block — button rendered as it actually appears in the app */
+  .ctx-example{
+    border:1px solid #eee;border-radius:10px;overflow:hidden;
+  }
+  .ctx-stage{
+    background:#3B7A57;
+    padding:28px 22px;
+    display:flex;justify-content:center;
+  }
+  .ctx-card{
+    width:100%;max-width:320px;
+    background:var(--surface-card-bg, linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%));
+    -webkit-backdrop-filter:var(--surface-card-blur, blur(20px));
+            backdrop-filter:var(--surface-card-blur, blur(20px));
+    border:var(--surface-card-border, 1px solid rgba(255,255,255,0.20));
+    border-radius:var(--surface-card-radius, 14px);
+    padding:18px 16px 20px;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    color:#fff;
+  }
+  .ctx-card-title{
+    font-family:var(--font-display);font-weight:500;font-size:18px;line-height:1.25;text-align:center;
+    color:#fff;letter-spacing:0;
+  }
+  .ctx-cap{padding:10px 14px;background:#fafafa;border-top:1px solid #eee;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:#555;line-height:1.5;}
+
+  /* ── Design-notes collapsible ── */
+  .notes{border:1px solid #eee;border-radius:10px;background:#fafafa;overflow:hidden;}
+  .notes > summary{
+    list-style:none;cursor:pointer;
+    padding:12px 16px;display:flex;align-items:center;gap:10px;
+    font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#222;
+    background:#fafafa;
+  }
+  .notes > summary::-webkit-details-marker{display:none;}
+  .notes > summary::before{
+    content:"";width:8px;height:8px;border-right:1.5px solid #555;border-bottom:1.5px solid #555;
+    transform:rotate(-45deg);transition:transform 180ms ease-out;display:inline-block;
+  }
+  .notes[open] > summary::before{transform:rotate(45deg);}
+  .notes > summary .summary-sub{font-weight:400;letter-spacing:0;text-transform:none;color:#777;font-size:11px;margin-left:auto;}
+  .notes-body{padding:6px 16px 16px;display:flex;flex-direction:column;gap:14px;background:#fff;border-top:1px solid #eee;}
+  .notes-body .rule{background:#fafafa;}
+  .notes-body h4{
+    font-family:var(--font-body);font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#444;
+    margin:6px 0 0;
+  }
+</style></head>
+<body><div class="wrap">
+
+  <!-- ─── Variants × States matrix ─── -->
+  <div class="section-head">
+    <div class="section-title">Buttons · Variants × States</div>
+    <div class="section-sub">3 variants × 5 states · Default &amp; Pressed read at full weight; supporting states recede</div>
+  </div>
+
+  <div class="matrix">
+    <!-- Header row -->
+    <div class="cell col-head"></div>
+    <div class="cell col-head">Default</div>
+    <div class="cell col-head col-quiet">Hover</div>
+    <div class="cell col-head">Pressed</div>
+    <div class="cell col-head col-quiet">Focus</div>
+    <div class="cell col-head col-quiet">Disabled</div>
+
+    <!-- Primary row -->
+    <div class="cell row-label">
+      <span class="name">Primary</span>
+      <span class="meta">Yellow #F6AE2D<br/>black text</span>
+    </div>
+    <div class="cell"><button class="btn btn-primary">Start tracking</button><span class="state-cap">#F6AE2D</span></div>
+    <div class="cell col-quiet"><button class="btn btn-primary is-hover">Start tracking</button><span class="state-cap">#E29A28<br/>(5% darker)</span></div>
+    <div class="cell"><button class="btn btn-primary is-pressed">Start tracking</button><span class="state-cap">→ Yellow Dark<br/>#EB9C0A</span></div>
+    <div class="cell col-quiet"><button class="btn btn-primary is-focus">Start tracking</button><span class="state-cap">2px ring · #F6AE2D · 2px offset</span></div>
+    <div class="cell col-quiet"><button class="btn btn-primary is-disabled" disabled>Start tracking</button><span class="state-cap">#D4D2D3 · text rgba(0,0,0,.4)</span></div>
+
+    <!-- Secondary row -->
+    <div class="cell row-label">
+      <span class="name">Secondary</span>
+      <span class="meta">Yellow Dark #EB9C0A<br/>black text</span>
+    </div>
+    <div class="cell"><button class="btn btn-secondary">Add task</button><span class="state-cap">#EB9C0A</span></div>
+    <div class="cell col-quiet"><button class="btn btn-secondary is-hover">Add task</button><span class="state-cap">#D78A07<br/>(5% darker)</span></div>
+    <div class="cell"><button class="btn btn-secondary is-pressed">Add task</button><span class="state-cap">#C97D08<br/>(darker amber)</span></div>
+    <div class="cell col-quiet"><button class="btn btn-secondary is-focus">Add task</button><span class="state-cap">2px ring · #F6AE2D · 2px offset</span></div>
+    <div class="cell col-quiet"><button class="btn btn-secondary is-disabled" disabled>Add task</button><span class="state-cap">#D4D2D3 · text rgba(0,0,0,.4)</span></div>
+
+    <!-- Ghost row (on green canvas) -->
+    <div class="cell row-label on-green">
+      <span class="name">Ghost</span>
+      <span class="meta">Transparent · 1.5px white border<br/>green canvas only</span>
+    </div>
+    <div class="cell ghost-row"><button class="btn btn-ghost">Later</button><span class="state-cap">transparent · #fff border</span></div>
+    <div class="cell ghost-row col-quiet"><button class="btn btn-ghost is-hover">Later</button><span class="state-cap">fill rgba(255,255,255,.08)</span></div>
+    <div class="cell ghost-row"><button class="btn btn-ghost is-pressed">Later</button><span class="state-cap">fill rgba(255,255,255,.15)</span></div>
+    <div class="cell ghost-row col-quiet"><button class="btn btn-ghost is-focus">Later</button><span class="state-cap">2px ring · #F6AE2D · 2px offset</span></div>
+    <div class="cell ghost-row col-quiet"><button class="btn btn-ghost is-disabled" disabled>Later</button><span class="state-cap">border + text rgba(255,255,255,.3)</span></div>
+  </div>
+
+  <!-- ─── Spec card ─ annotated default sample ─── -->
+  <div class="section-head">
+    <div class="section-title">Spec card · Primary default</div>
+    <div class="section-sub">Production measurements for handoff</div>
+  </div>
+
+  <div class="spec-card">
+    <div class="spec-stage">
+      <div class="spec-btn-wrap">
+        <button class="btn btn-primary" type="button">Start tracking</button>
+        <div class="dim-box"></div>
+        <div class="pad-box"></div>
+        <span class="dim-h"><span>52px</span></span>
+        <span class="dim-w">min-width 120px</span>
+        <span class="dim-r">r: 9999px</span>
+      </div>
+    </div>
+    <div class="spec-list">
+      <div class="spec-row"><span class="k">Box</span><span class="v"><b>52px</b> tall · padding <b>16px</b> horiz × <b>14px</b> top × <b>18px</b> bottom · min-width <b>120px</b><br/><span style="color:#888;font-style:italic;">Bottom-heavy vertical padding (4px asymmetry) lifts the glyph mass to optical center — Niramit Medium's cap-height sits high relative to its baseline, so more space below the baseline than above the cap is what reads as centered.</span></span></div>
+      <div class="spec-row"><span class="k">Corner radius</span><span class="v"><b>9999px</b> (full pill)</span></div>
+      <div class="spec-row"><span class="k">Type</span><span class="v"><b>Niramit Medium 500</b> · <b>16px</b> · letter-spacing 0 · line-height 1 · center<br/><span style="color:#888;font-style:italic;">Rationale: see <code>CHANGELOG.md</code> entry 2026-05-07.</span></span></div>
+      <div class="spec-row"><span class="k">Background</span><span class="v"><b>#F6AE2D</b> (Yellow) · text <b>#0E0F0C</b> (<code>--color-black</code>)</span></div>
+      <div class="spec-row"><span class="k">Shadow</span><span class="v"><b>0 4px 12px rgba(0,0,0,0.15)</b><br/>Default state only — cleared on Pressed/Focus/Disabled · Ghost has no shadow</span></div>
+      <div class="spec-row"><span class="k">Transition</span><span class="v">all <b>150ms</b> ease-out</span></div>
+    </div>
+  </div>
+
+  <!-- ─── Single short rules paragraph ─── -->
+  <div class="rule">
+    <b>Variant usage —</b>
+    <b>Primary</b> is the default CTA on any surface.
+    <b>Secondary</b> pairs with Primary when two high-emphasis actions appear together.
+    <b>Ghost</b> is reserved for the primary green canvas and is used for low-emphasis or dismissive actions
+    (<code>Later</code>, <code>Cancel</code>).
+  </div>
+
+  <!-- ─── With-icon sub-variant ─── -->
+  <div class="section-head">
+    <div class="section-title">With icon · leading glyph</div>
+    <div class="section-sub">SF Symbols-style · 8px gap · same 5 states apply</div>
+  </div>
+
+  <div class="icon-row">
+    <div class="icon-cell">
+      <button class="btn btn-primary" type="button">
+        <!-- arrow.right -->
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="2" y1="7" x2="12" y2="7"/><polyline points="7,2 12,7 7,12"/>
+        </svg>
+        Start tracking
+      </button>
+      <span class="cap">Primary · arrow.right</span>
+    </div>
+
+    <div class="icon-cell">
+      <button class="btn btn-secondary" type="button">
+        <!-- plus -->
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/>
+        </svg>
+        Add task
+      </button>
+      <span class="cap">Secondary · plus</span>
+    </div>
+
+    <div class="icon-cell on-green">
+      <button class="btn btn-ghost" type="button">
+        <!-- checkmark -->
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="2,7 6,11 12,3"/>
+        </svg>
+        I am done
+      </button>
+      <span class="cap">Ghost · checkmark</span>
+    </div>
+  </div>
+
+  <!-- ─── Design notes (collapsed by default) ─── -->
+  <details class="notes">
+    <summary>Design notes <span class="summary-sub">Type, sizing, disabled, in-context demo</span></summary>
+    <div class="notes-body">
+
+      <h4>Type rationale</h4>
+      <div class="rule" style="border-left-color:#3B7A57;">
+        Rationale moved to <code>CHANGELOG.md</code> (see token tuning entries on 2026-05-07).
+      </div>
+
+      <h4>Sizing</h4>
+      <div class="rule" style="border-left-color:#3B7A57;">
+        Buttons are <b>content-width</b> by default — <code>width:auto</code>, <code>min-width:120px</code>, <code>max-width:280px</code>.
+        Position and alignment are controlled by the <b>parent layout</b> (e.g., centered within a card, anchored to a notification action stack), not by the button itself.
+        There is no full-width CTA pattern in Focus Forest.
+      </div>
+
+      <h4>Disabled state</h4>
+      <div class="rule" style="border-left-color:#979495;">
+        Disabled state is intentionally neutral. Both Primary and Secondary disabled buttons render
+        identically (<code>--color-grey-light</code> background, low-opacity black text), since disabled is an absence
+        of action rather than a brand-flavored state. Ghost retains its low-opacity white treatment for use on dark surfaces.
+      </div>
+
+      <h4>In context</h4>
+      <div class="ctx-example">
+        <div class="ctx-stage">
+          <div class="ctx-card">
+            <div class="ctx-card-title">Good job!<br/>You reached level 5</div>
+            <button class="btn btn-primary" type="button">See your jungle here</button>
+          </div>
+        </div>
+        <div class="ctx-cap">
+          The Primary button sitting inside a glassmorphism progress card on the Home screen. Sized to its content (no full-width stretching), centered by the parent's flex layout, with breathing room around it.
+        </div>
+      </div>
+
+    </div>
+  </details>
+
+</div></body></html>
+</content>
+</invoke>

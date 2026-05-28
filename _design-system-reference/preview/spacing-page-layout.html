@@ -1,0 +1,131 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:#fff;color:#111;font-family:var(--font-body);}
+  .page{padding:24px;display:flex;flex-direction:column;gap:24px;max-width:840px;}
+
+  .head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;}
+  .title{font-family:var(--font-display);font-weight:500;font-size:20px;color:#111;letter-spacing:0;line-height:1.3;}
+  .subtitle{font-family:var(--font-body);font-size:13px;color:#666;line-height:1.4;}
+
+  .row{display:grid;grid-template-columns:minmax(220px,1fr) minmax(280px,1.2fr);gap:24px;align-items:start;}
+
+  /* ── Visual demo — mobile frame with padding markers ── */
+  .frame-wrap{
+    background:#fafafa;border:1px solid #eee;border-radius:14px;
+    padding:32px;display:flex;align-items:center;justify-content:center;
+  }
+  .frame{
+    position:relative;width:240px;height:420px;
+    background:#3B7A57;border-radius:28px;
+    overflow:hidden;
+  }
+  /* Padding markers — dashed magenta to match other spec docs */
+  .pad-top, .pad-bottom, .pad-left, .pad-right{
+    position:absolute;background:rgba(199,57,138,0.10);
+  }
+  .pad-top   { top:0; left:0; right:0; height:32px;
+               border-bottom:1px dashed #C7398A; }
+  .pad-bottom{ bottom:0; left:0; right:0; height:32px;
+               border-top:1px dashed #C7398A; }
+  .pad-left  { top:32px; bottom:32px; left:0; width:16px;
+               border-right:1px dashed #C7398A; }
+  .pad-right { top:32px; bottom:32px; right:0; width:16px;
+               border-left:1px dashed #C7398A; }
+  /* Content area placeholder */
+  .content{
+    position:absolute;top:32px;bottom:32px;left:16px;right:16px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .content-card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%);
+    border:1px solid rgba(255,255,255,0.20);border-radius:14px;
+    padding:14px;color:#fff;font-size:11px;line-height:1.4;
+  }
+  /* Labels for the padding values */
+  .label{
+    position:absolute;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10px;font-weight:600;
+    color:#C7398A;background:#fff;padding:2px 6px;border-radius:3px;
+    border:1px solid rgba(199,57,138,0.30);
+  }
+  .label-top   { top:-13px; left:50%; transform:translateX(-50%); }
+  .label-bottom{ bottom:-13px; left:50%; transform:translateX(-50%); }
+  .label-left  { top:50%; left:-12px; transform:translate(-100%, -50%); }
+  .label-right { top:50%; right:-12px; transform:translate(100%, -50%); }
+
+  /* ── Spec list panel ── */
+  .spec{
+    background:#fafafa;border:1px solid #eee;border-radius:10px;
+    padding:14px 16px;display:flex;flex-direction:column;gap:8px;
+    font-size:12px;color:#222;line-height:1.5;
+  }
+  .spec .k{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:#888;text-transform:uppercase;letter-spacing:.06em;}
+  .spec .v{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;}
+  .spec .v b{font-weight:600;}
+
+  .note{
+    margin-top:6px;padding:12px 14px;
+    background:#fafafa;border-left:3px solid #F6AE2D;border-radius:2px;
+    font-size:11.5px;line-height:1.55;color:#444;
+  }
+  .note b{font-weight:700;color:#111;}
+  .note code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;background:#fff;padding:1px 5px;border-radius:3px;border:1px solid #eee;}
+</style></head>
+<body><div class="page">
+
+  <div class="head">
+    <div class="title">Page padding</div>
+    <div class="subtitle">Default screen-level padding for the mobile app — applied to the content container of every screen.</div>
+  </div>
+
+  <!-- ─── Visual demo ─── -->
+  <div class="row">
+    <div class="frame-wrap">
+      <div class="frame">
+        <div class="pad-top">
+          <span class="label label-top">32px</span>
+        </div>
+        <div class="pad-bottom">
+          <span class="label label-bottom">32px</span>
+        </div>
+        <div class="pad-left">
+          <span class="label label-left">16px</span>
+        </div>
+        <div class="pad-right">
+          <span class="label label-right">16px</span>
+        </div>
+        <div class="content">
+          <div class="content-card">Heading</div>
+          <div class="content-card">Section card</div>
+          <div class="content-card">Another card</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec">
+      <div><span class="k">Sides (left + right)</span><br/><span class="v"><b>16px</b> · Tailwind <code>px-4</code> · <code>--space-4</code></span></div>
+      <div><span class="k">Top</span><br/><span class="v"><b>32px</b> · Tailwind <code>pt-8</code> · <code>--space-8</code></span></div>
+      <div><span class="k">Bottom</span><br/><span class="v"><b>32px</b> · Tailwind <code>pb-8</code> · <code>--space-8</code></span></div>
+      <div><span class="k">Shorthand</span><br/><span class="v"><code>px-4 py-8</code> on the screen's outer content container.</span></div>
+      <div><span class="k">Applies to</span><br/><span class="v">All app screens (<code>/</code>, <code>/today</code>, <code>/profile</code>, <code>/events/todo</code>, <code>/events/calendar</code>, <code>/events/countdown</code>). The container sits inside the route group's app shell, below the StatusBar + AppHeader + ScreenTabs chrome and above the BottomNav.</span></div>
+    </div>
+  </div>
+
+  <!-- ─── Documented exceptions ─── -->
+  <div class="note">
+    <b>Documented exceptions —</b>
+    <b>Lock screen</b> (<code>/lock</code>) is OS chrome and uses its own iOS-spec padding, not the brand standard.
+    <b>Calendar</b> (<code>/events/calendar</code>) keeps <code>pb-[80vh]</code> on the cards container so any WeekStrip pill click can position its target AgendaCard flush to the top of the viewport — the 80vh runway is a scroll-positioning spec, not a visual padding choice. The page's TOP padding (<code>pt-8</code>) still applies to the sticky chrome.
+    <b>The <code>/components</code> sandbox</b> uses its own dense grid layout to fit primitive matrices and is exempt from the screen padding standard.
+  </div>
+
+  <div class="note" style="border-left-color:#3B7A57;">
+    <b>Rationale —</b>
+    16px sides on a 414px-wide mobile viewport leaves the inner content column at 382px — comfortable for a single column of card content without feeling cramped near the bezel.
+    32px top + bottom places content below the chrome header by a clear visual gap (no abrupt collisions) and prevents the last item from being flush with the BottomNav.
+    Both values consume canonical 4pt-grid tokens (<code>--space-4</code> and <code>--space-8</code>).
+  </div>
+
+</div></body></html>

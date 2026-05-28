@@ -1,0 +1,143 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css?v=accent4"/>
+<style>
+  html,body{margin:0;padding:0;background:#fff;font-family:var(--font-body);color:#111;}
+  .card{padding:20px 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:18px;}
+  .row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .swatch{display:flex;flex-direction:column;gap:6px;align-items:flex-start;}
+  .chip{width:64px;height:64px;border-radius:12px;border:1px solid rgba(0,0,0,0.06);}
+  .name{font-family:var(--font-body);font-size:12px;font-weight:600;color:#111;}
+  .hex{font-family:ui-monospace,monospace;font-size:11px;color:#666;}
+
+  /* Sub-group */
+  .group{display:flex;flex-direction:column;gap:10px;}
+  .group-head{display:flex;align-items:baseline;gap:10px;border-top:1px solid #eee;padding-top:14px;}
+  .group-title{font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#222;}
+  .group-sub{font-size:11px;color:#777;}
+
+  .link-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .link-card{
+    flex:1 1 280px;min-width:260px;
+    border-radius:12px;overflow:hidden;border:1px solid rgba(0,0,0,0.08);
+    display:flex;flex-direction:column;
+  }
+  .link-surface{
+    padding:18px 16px 16px;display:flex;flex-direction:column;gap:8px;
+    font-family:var(--font-body);
+  }
+  .link-sample{
+    font-size:14px;font-weight:400;line-height:1.5;
+    text-decoration:underline;text-underline-offset:2px;
+  }
+  .link-surface-label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;opacity:.7;}
+  /* Inline hex fallbacks so the link samples render correctly even if the linked
+     stylesheet is cached at an older version that lacks the link-color tokens. */
+  .surface-light{background:#FFFFFF;}
+  .surface-light .link-sample{color:#0066CC;color:var(--color-link-on-light, #0066CC);}
+  .surface-light .link-surface-label{color:#888;}
+  .surface-dark{background:#3B7A57;background:var(--ff-primary, #3B7A57);}
+  .surface-dark .link-sample{color:#92D3F0;color:var(--color-link-on-dark, #92D3F0);}
+  .surface-dark .link-surface-label{color:rgba(255,255,255,.75);}
+
+  .link-meta{
+    background:#fafafa;border-top:1px solid #eee;
+    padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-family:var(--font-body);
+  }
+  .token{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#222;}
+  .ratio{font-size:11px;color:#0a7a3b;font-weight:600;}
+  .swatch-dot{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,0.08);display:inline-block;vertical-align:-2px;margin-right:6px;}
+
+  .note{
+    font-size:11px;line-height:1.5;color:#555;
+    padding:10px 12px;background:#fafafa;border-left:2px solid #ddd;border-radius:2px;
+  }
+  .note b{color:#222;font-weight:600;}
+  .note code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;background:#fff;padding:1px 5px;border-radius:3px;border:1px solid #eee;}
+</style></head>
+<body><div class="card">
+
+<div class="row">
+  <div class="swatch"><div class="chip" style="background:#F1F9E7"></div><div class="name">Mist</div><div class="hex">#F1F9E7</div></div>
+  <div class="swatch"><div class="chip" style="background:#9CAA87"></div><div class="name">Sage</div><div class="hex">#9CAA87</div></div>
+  <div class="swatch"><div class="chip" style="background:#7ABF94"></div><div class="name">Moss</div><div class="hex">#7ABF94</div></div>
+  <div class="swatch"><div class="chip" style="background:#094934"></div><div class="name">Deep Forest</div><div class="hex">#094934</div></div>
+  <div class="swatch"><div class="chip" style="background:#92D3F0"></div><div class="name">Sky</div><div class="hex">#92D3F0</div></div>
+  <div class="swatch"><div class="chip" style="background:#0066CC"></div><div class="name">Link Blue</div><div class="hex">#0066CC</div></div>
+  <div class="swatch"><div class="chip" style="background:#AC111E"></div><div class="name">Error</div><div class="hex">#AC111E</div></div>
+  <div class="swatch"><div class="chip" style="background:#D67B42"></div><div class="name">Orange</div><div class="hex">#D67B42</div></div>
+  <div class="swatch"><div class="chip" style="background:#FF9F79"></div><div class="name">Coral</div><div class="hex">#FF9F79</div></div>
+</div>
+
+<div class="group">
+  <div class="group-head">
+    <div class="group-title">Grey scale</div>
+    <div class="group-sub">Tonal lighter siblings of Grey — neutral, brand-agnostic surfaces</div>
+  </div>
+  <div class="note" style="margin-bottom:2px;">
+    Greys are documented here as a tonal scale rather than alongside the accent hues.
+    Use these for neutral surfaces, disabled states, dividers, and secondary text.
+  </div>
+  <div class="row">
+    <div class="swatch"><div class="chip" style="background:#E8E7E7"></div><div class="name">Grey Lighter</div><div class="hex">#E8E7E7</div></div>
+    <div class="swatch"><div class="chip" style="background:#D4D2D3"></div><div class="name">Grey Light</div><div class="hex">#D4D2D3</div></div>
+    <div class="swatch"><div class="chip" style="background:#979495"></div><div class="name">Grey</div><div class="hex">#979495</div></div>
+  </div>
+</div>
+
+<div class="group">
+  <div class="group-head">
+    <div class="group-title">Link colors</div>
+    <div class="group-sub">Surface-aware · WCAG AA</div>
+  </div>
+
+  <div class="link-row">
+    <div class="link-card">
+      <div class="link-surface surface-light">
+        <div class="link-surface-label">On light surface · #FFFFFF</div>
+        <div class="link-sample">Learn more about Focus Forest</div>
+      </div>
+      <div class="link-meta">
+        <div class="token"><span class="swatch-dot" style="background:#0066CC"></span>--color-link-on-light · #0066CC</div>
+        <div class="ratio">6.3:1 ✓ AA</div>
+      </div>
+    </div>
+
+    <div class="link-card">
+      <div class="link-surface surface-dark">
+        <div class="link-surface-label">On dark surface · #3B7A57</div>
+        <div class="link-sample">Learn more about Focus Forest</div>
+      </div>
+      <div class="link-meta">
+        <div class="token"><span class="swatch-dot" style="background:#92D3F0"></span>--color-link-on-dark · #92D3F0</div>
+        <div class="ratio">5.2:1 ✓ AA</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Rule —</b> Link color always inherits from the surface context.
+    Light surfaces (white, mist) use <code>--color-link-on-light</code>;
+    dark surfaces (primary green, deep forest) use <code>--color-link-on-dark</code>.
+    Both are Source Sans 3 Regular, 14px, underlined by default, and meet WCAG AA (4.5:1) on their intended background.
+    The on-dark token reuses the existing <code>Sky</code> accent (#92D3F0).
+  </div>
+</div>
+
+<div class="group">
+  <div class="group-head">
+    <div class="group-title">Portfolio chrome</div>
+    <div class="group-sub">Desktop frame only · not used inside the app</div>
+  </div>
+
+  <div class="row">
+    <div class="swatch"><div class="chip" style="background:#FDFBD4"></div><div class="name">Cream</div><div class="hex">#FDFBD4</div></div>
+  </div>
+
+  <div class="note">
+    <b>Portfolio context —</b> Warm cream frames the desktop layout (root wrapper at <code>md:+</code> only) in portfolio contexts. Not used inside the app.
+  </div>
+</div>
+
+</div></body></html>

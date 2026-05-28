@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Focus Forest UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css"/>
+<style>
+:root {
+  --green-primary: #3B7A57;
+  --green-header: #4a9468;
+  --green-card: #52a070;
+  /* Lock-screen wallpaper is intentionally NOT a Focus Forest token — the OS owns that surface. */
+  --yellow: #F6AE2D;
+  --yellow-dark: #EB9C0A;
+  --font-niramit: "Niramit", system-ui, sans-serif;
+  --font-source: "Source Sans 3", system-ui, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+html, body { background: #141414; min-height: 100vh; font-family: var(--font-source); }
+.page-wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 32px 20px 48px; }
+.page-header { text-align: center; margin-bottom: 20px; }
+.page-header h1 { font-family: var(--font-niramit); font-size: 22px; font-weight: 500; color: #5abf82; letter-spacing: -0.3px; }
+.page-header p { color: #777; font-size: 12px; margin-top: 3px; }
+.screen-tabs { display: flex; gap: 6px; margin-bottom: 22px; background: #1e1e1e; padding: 5px; border-radius: 30px; border: 1px solid #2a2a2a; }
+.screen-tab { padding: 7px 16px; border-radius: 24px; border: none; background: transparent; color: #666; font-family: var(--font-source); font-size: 12.5px; cursor: pointer; }
+.screen-tab.active { background: var(--green-header); color: white; font-weight: 600; }
+
+.iphone-frame { position: relative; width: 393px; background: #111; border-radius: 54px; padding: 14px; box-shadow: 0 0 0 1px #333, 0 0 0 3px #1e1e1e, 0 40px 100px rgba(0,0,0,0.85), 0 12px 40px rgba(0,0,0,0.5); }
+.iphone-screen { width: 100%; height: 824px; background: var(--green-primary); border-radius: 42px; overflow: hidden; position: relative; }
+.dynamic-island { position: absolute; top: 28px; left: 50%; transform: translateX(-50%); width: 118px; height: 34px; background: #111; border-radius: 20px; z-index: 200; pointer-events: none; }
+.screen { display: flex; flex-direction: column; height: 100%; position: absolute; inset: 0; }
+
+/* Status bar */
+.status-bar { height: 54px; padding: 16px 26px 0; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; position: relative; z-index: 10; }
+.status-time { font-family: var(--font-source); font-size: 17px; font-weight: 600; color: white; letter-spacing: -0.3px; }
+.status-icons { display: flex; align-items: center; gap: 7px; }
+
+/* App header */
+.app-header { background: var(--green-header); padding: 0 20px; height: 54px; display: flex; align-items: center; flex-shrink: 0; }
+.header-logo { width: 30px; height: 30px; background: var(--green-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-niramit); font-size: 12px; font-weight: 700; color: white; }
+.header-title { font-family: var(--font-niramit); font-size: 18px; color: white; margin-left: 9px; }
+.header-spacer { flex: 1; }
+.header-dots { color: white; font-size: 22px; }
+
+/* Bottom nav */
+.bottom-nav { background: var(--green-header); height: 82px; padding-bottom: 14px; flex-shrink: 0; position: relative; z-index: 30; }
+.nav-row { display: flex; width: 100%; align-items: flex-end; justify-content: space-around; padding: 0 10px; height: 100%; }
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding-bottom: 2px; background: none; border: none; }
+.nav-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.65); }
+.nav-label { font-family: var(--font-source); font-size: 10px; color: white; }
+.nav-item.active .nav-icon { color: var(--yellow); }
+.nav-add-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+.add-fab { width: 54px; height: 54px; background: var(--yellow); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -30px; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.3); transition: background 0.2s, transform 0.15s; z-index: 2; position: relative; border: none; }
+.add-fab:active { transform: scale(0.95); }
+.add-fab.open { background: #7abf94; }
+.add-fab svg { transition: transform 0.25s; }
+.add-fab.open svg { transform: rotate(45deg); }
+.add-label-text { font-family: var(--font-source); font-size: 10px; color: white; margin-top: 3px; }
+.add-submenu { position: absolute; bottom: calc(100% + 12px); left: 50%; display: flex; width: 210px; justify-content: space-between; opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(12px); transition: opacity 0.25s, transform 0.25s; z-index: 50; }
+.add-submenu.open { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+.sub-icon-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+.sub-icon-wrap:nth-child(2) { transform: translateY(-28px); }
+.sub-circle { width: 46px; height: 46px; background: rgba(255,255,255,0.93); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 18px rgba(0,0,0,0.3); }
+.sub-icon-label { font-family: var(--font-source); font-size: 9px; color: white; text-shadow: 0 1px 6px rgba(0,0,0,0.5); font-weight: 600; }
+
+/* Home */
+.screen-home { background: var(--green-header); }
+.home-scroll { flex: 1; overflow-y: auto; background: var(--green-primary); padding: 4px 18px 20px; scrollbar-width: none; }
+.home-scroll::-webkit-scrollbar { display: none; }
+.home-welcome { font-family: var(--font-niramit); font-size: 38px; font-weight: 300; color: white; text-align: center; margin-top: 18px; letter-spacing: -0.5px; }
+.home-progress-label { font-family: var(--font-niramit); font-size: 15px; font-weight: 300; color: white; text-align: center; margin: 60px 0 18px; }
+.progress-card { background: var(--green-card); border-radius: 18px; overflow: hidden; }
+.progress-level { font-family: var(--font-niramit); font-size: 15px; color: white; text-align: center; padding: 16px 16px 14px; line-height: 1.5; }
+.jungle-wrap { position: relative; width: 100%; overflow: hidden; border-radius: 0 0 18px 18px; }
+.jungle-svg { width: 100%; display: block; }
+.jungle-cta { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--yellow); color: #1a1a1a; font-family: var(--font-niramit); font-size: 13px; font-weight: 600; padding: 9px 22px; border-radius: 24px; border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.3); }
+
+@keyframes sway { 0%,100%{transform:rotate(-0.8deg);transform-origin:bottom center;} 50%{transform:rotate(0.8deg);transform-origin:bottom center;} }
+@keyframes sway2 { 0%,100%{transform:rotate(0.6deg);transform-origin:bottom center;} 50%{transform:rotate(-0.6deg);transform-origin:bottom center;} }
+@keyframes birdBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-2px);} }
+@keyframes frogBlink { 0%,90%,100%{transform:scaleY(1);} 95%{transform:scaleY(0.15);} }
+.t1 { animation: sway 3.8s ease-in-out infinite; }
+.t2 { animation: sway2 4.5s ease-in-out infinite; }
+.t3 { animation: sway 3.2s ease-in-out infinite 0.4s; }
+.bird-group { animation: birdBob 2.2s ease-in-out infinite; }
+.frog-eye { animation: frogBlink 4s ease-in-out infinite; }
+
+/* Todo */
+.screen-todo { background: var(--green-header); }
+.tab-bar { background: var(--green-header); display: flex; padding: 0 12px; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.tab-item { font-family: var(--font-source); font-size: 13px; color: rgba(255,255,255,0.6); padding: 9px 14px 10px; border-bottom: 2.5px solid transparent; cursor: pointer; background: none; border-left: none; border-right: none; border-top: none; }
+.tab-item.active { color: white; border-bottom-color: white; font-weight: 600; }
+.todo-scroll { flex: 1; overflow-y: auto; background: var(--green-primary); scrollbar-width: none; }
+.todo-scroll::-webkit-scrollbar { display: none; }
+.todo-list-title { font-family: var(--font-niramit); font-size: 19px; font-weight: 500; color: white; text-align: center; padding: 14px 16px 10px; }
+.search-wrap { padding: 0 16px 10px; position: relative; }
+.search-input { width: 100%; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25); border-radius: 10px; padding: 9px 36px 9px 14px; font-family: var(--font-source); font-size: 13.5px; color: white; outline: none; }
+.search-input::placeholder { color: rgba(255,255,255,0.45); }
+.search-mag { position: absolute; right: 28px; top: 50%; transform: translateY(-60%); }
+.todo-list { padding: 0 14px 20px; }
+.todo-row { display: flex; align-items: center; padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); gap: 7px; }
+.drag-dots { color: rgba(255,255,255,0.35); font-size: 14px; cursor: grab; letter-spacing: -1px; }
+.check-box { width: 17px; height: 17px; border: 1.8px solid rgba(255,255,255,0.75); border-radius: 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; background: transparent; padding: 0; }
+.check-box.checked { background: rgba(255,255,255,0.3); border-color: rgba(255,255,255,0.5); position: relative; }
+.check-box.checked::after { content: ""; width: 9px; height: 5px; border-left: 2px solid white; border-bottom: 2px solid white; transform: rotate(-45deg) translate(1px, -1px); display: block; }
+.row-text { flex: 1; font-family: var(--font-source); font-size: 13.5px; color: white; }
+.row-text.done { text-decoration: line-through; opacity: 0.45; }
+.row-actions { display: flex; align-items: center; gap: 8px; }
+.expand-arrow { color: rgba(255,255,255,0.65); font-size: 15px; cursor: pointer; transition: transform 0.2s; background: none; border: none; padding: 0; }
+.expand-arrow.collapsed { transform: rotate(-90deg); }
+.trash-btn { color: rgba(255,255,255,0.45); cursor: pointer; background: none; border: none; padding: 2px; }
+.todo-row.sub-row { padding-left: 38px; }
+.group-children { overflow: hidden; max-height: 300px; transition: max-height 0.28s ease; }
+.group-children.collapsed { max-height: 0; }
+
+/* Lock screen — iOS system styling.
+ * NOTE: The wallpaper here is NOT a Focus Forest design token. It's a
+ * dawn / sunrise gradient placeholder representing a generic, modern OS context.
+ * The only Focus Forest-owned element on the lock screen is the notification
+ * card content. Stops are darkened ~10% from the original spec
+ * (#F4A6A0 / #C8A4D4 / #5B7FAE) so white system UI clears ~4.5:1 contrast
+ * against the darkest portion of the gradient. */
+:root { --sf-rounded: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif; --sf-pro: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; --ios-blue: #007AFF; --ios-divider: rgba(60, 60, 67, 0.18); }
+.screen-lock {
+  background:
+    linear-gradient(180deg,
+      #DB9590 0%,    /* warm peach (top)    — ~10% darker than #F4A6A0 */
+      #B494BF 50%,   /* gentle lavender     — ~10% darker than #C8A4D4 */
+      #52729C 100%   /* muted dusk blue     — ~10% darker than #5B7FAE; ~4.5:1 vs #fff */
+    );
+}
+/* iOS-style legibility shadow on white system UI — scoped to the lock screen so
+   it doesn't bleed into other screens that share .status-bar. */
+.screen-lock .status-time,
+.screen-lock .ios-date,
+.screen-lock .ios-clock { text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
+.screen-lock .status-icons,
+.screen-lock .ios-lock-icon { filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25)); }
+.lock-body { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 16px; overflow: hidden; }
+.ios-lock-icon { margin-top: 4px; }
+.ios-date { font-family: var(--sf-rounded); font-size: 22px; font-weight: 500; color: #fff; margin-top: 4px; line-height: 1.2; margin-bottom: 14px; }
+.ios-clock { font-family: var(--sf-rounded); font-size: 96px; font-weight: 300; color: #fff; letter-spacing: 0; line-height: 1; margin-bottom: 22px; }
+.ios-notif-stack { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.ios-notif { background: rgba(255,255,255,0.95); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-radius: 18px; padding: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.ios-notif-head { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+.ios-app-icon { width: 24px; height: 24px; border-radius: 6px; background: var(--green-primary); color: #fff; font-family: var(--sf-rounded); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.ios-app-name { flex: 1; font-family: var(--sf-pro); font-size: 13px; font-weight: 500; color: rgba(60,60,67,0.6); text-transform: uppercase; letter-spacing: 0.3px; }
+.ios-ts { font-family: var(--sf-pro); font-size: 13px; color: rgba(60,60,67,0.6); }
+.ios-notif-title { font-family: var(--sf-pro); font-size: 15px; font-weight: 600; color: rgba(0,0,0,0.9); margin-bottom: 2px; line-height: 1.3; }
+.ios-notif-body { font-family: var(--sf-pro); font-size: 15px; color: rgba(0,0,0,0.8); line-height: 1.35; }
+.ios-actions { background: rgba(255,255,255,0.85); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.ios-action { display: block; width: 100%; height: 57px; background: transparent; border: none; border-bottom: 0.5px solid var(--ios-divider); font-family: var(--sf-pro); font-size: 17px; color: var(--ios-blue); text-align: center; cursor: pointer; padding: 0 16px; }
+.ios-action:last-child { border-bottom: none; }
+.ios-action.picked { font-weight: 600; }
+.ios-lock-bottom { margin-top: auto; width: 100%; padding: 12px 4px 8px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.ios-util-row { display: flex; width: 100%; justify-content: space-between; padding: 0 6px; }
+.ios-util { width: 50px; height: 50px; background: rgba(0,0,0,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; }
+.ios-home-indicator { width: 134px; height: 5px; background: rgba(255,255,255,0.9); border-radius: 3px; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="StatusBar.jsx"></script>
+<script type="text/babel" src="AppHeader.jsx"></script>
+<script type="text/babel" src="BottomNav.jsx"></script>
+<script type="text/babel" src="JungleIllustration.jsx"></script>
+<script type="text/babel" src="Screens.jsx"></script>
+<script type="text/babel" src="App.jsx"></script>
+</body>
+</html>

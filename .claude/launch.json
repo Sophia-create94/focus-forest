@@ -1,0 +1,13 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "next-dev",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["./node_modules/next/dist/bin/next", "dev"],
+      "cwd": "/Users/sophiamueller/Documents/focus-forest",
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}

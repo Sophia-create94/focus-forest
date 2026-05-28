@@ -1,0 +1,373 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Keep Tailwind's class scanner out of the markdown docs. They contain
+ * prose + example/legacy class names (e.g. the CHANGELOG documents
+ * arbitrary-value classes) that would otherwise be picked up as utility
+ * candidates — bloating the CSS and, in the wildcard case, emitting
+ * invalid CSS that breaks the build. App source under app/ + components/
+ * is still scanned normally. */
+@source not "../**/*.md";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  /* Phase 3 brand override — primary green; white-on-green is 5.11:1 (WCAG AA). */
+  --primary: #3B7A57;
+  --primary-foreground: #FFFFFF;
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Phase 5a — iPhone frame (PhoneFrame component) */
+  --phone-frame-width: 414px;
+  --phone-frame-height: 868px;
+  --phone-frame-bezel: 12px;
+  --phone-frame-outer-radius: 52px;
+  --phone-frame-inner-radius: 40px;
+  --phone-frame-island-width: 120px;
+  --phone-frame-island-height: 37px;
+  --phone-frame-island-top: 12px;
+  --phone-frame-island-radius: 20px;
+
+  /* Device shadow (distinct from brand UI shadows) */
+  --shadow-device: 0 13px 38px rgba(0, 0, 0, 0.18), 0 3px 10px rgba(0, 0, 0, 0.10), 0 0 0 1px #2a2a2a;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  /* Brand colors don't dark-mode — same primary in both schemes. */
+  --primary: #3B7A57;
+  --primary-foreground: #FFFFFF;
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  /* font-body resolves to Source Sans 3 via lib/fonts.ts; was font-sans
+   * (which dangled after Geist removal). */
+  html {
+    @apply font-body;
+  }
+}
+
+/* ── Focus Forest brand tokens (Phase 3) ───────────────────────────
+ * Generated as Tailwind v4 utilities. Authoring sources:
+ *   _design-system-reference/colors_and_type.css (primary)
+ *   _design-system-reference/preview/type-scale.html (named text tokens)
+ * Note: --color-primary is NOT defined here — it flows from
+ * :root --primary (overridden above) through shadcn's @theme inline
+ * mapping. Same for the FF white "secondary" — covered by bg-white
+ * until Phase 4, per CLAUDE.md scope.
+ */
+@theme {
+  /* Brand colors */
+  --color-yellow: #F6AE2D;
+  --color-yellow-dark: #EB9C0A;
+  --color-black: #0E0F0C;
+  --color-mist: #F1F9E7;                    /* soft pale-green highlights & illustrative fills */
+  --color-cream: #FDFBD4;                   /* warm cream desktop frame background */
+  --color-sage: #9CAA87;
+  --color-moss: #7ABF94;
+  --color-deep-forest: #094934;
+  --color-sky: #92D3F0;
+  --color-link-blue: #0066CC;
+  --color-error: #AC111E;
+  --color-orange: #D67B42;
+  --color-coral: #ff9f79;
+  --color-grey-lighter: #E8E7E7;
+  --color-grey-light: #D4D2D3;
+  --color-grey: #979495;
+  --color-link-on-light: #0066CC;
+  --color-link-on-dark: #92D3F0;
+
+  /* Spacing — 4pt scale; default step generator otherwise unchanged */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+
+  /* Radii — overrides shadcn's --radius-sm/md/lg via last-write-wins */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+
+  /* Component-specific radii (per _design-system-reference/preview/spacing-radii.html).
+   * Bound to a single component's spec; sit alongside the canonical scale. */
+  --radius-checkbox: 3px;   /* Checkbox primitive */
+  --radius-input:    10px;  /* Input primitive */
+
+  /* Shadows — overrides Tailwind v4 defaults at these names */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.30);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.28);
+
+  /* Fonts (CSS variables come from lib/fonts.ts via <html> className) */
+  --font-display: var(--font-niramit), system-ui, sans-serif;
+  --font-body: var(--font-source-sans), system-ui, sans-serif;
+
+  /* System fonts — NOT brand. For OS-context surfaces (lock screen status
+   * bar, clock, date). Reference: components-notification.html. The brand
+   * fonts (font-display Niramit, font-body Source Sans 3) are for app-owned
+   * content; system fonts simulate iPhone OS chrome. */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --font-system-rounded: ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* Type scale — semantic tokens (font-family is applied separately
+   * via font-display / font-body utilities, since each text-* token
+   * here only carries size/weight/line-height/letter-spacing) */
+  /* --text-display (56px) removed 2026-05-19 — no production consumer
+   * remained after featured-countdown switched to text-h1. */
+
+  --text-h1: 38px;
+  --text-h1--font-weight: 500;
+  --text-h1--line-height: 1.15;
+  --text-h1--letter-spacing: -0.5px;
+
+  --text-h2: 30px;
+  --text-h2--font-weight: 500;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.3px;
+
+  --text-h3: 20px;
+  --text-h3--font-weight: 500;
+  --text-h3--line-height: 1.3;
+
+  --text-h4: 16px;
+  --text-h4--font-weight: 600;
+  --text-h4--line-height: 1.4;
+
+  --text-body: 14px;
+  --text-body--font-weight: 400;
+  --text-body--line-height: 1.5;
+  /* --text-body-small removed 2026-05-19 — was an exact duplicate of
+   * --text-body. All consumers swapped to text-body.
+   * --text-body-large (18px) removed 2026-05-21 — never consumed. */
+
+  /* Caption is the smallest body text in the design system. Was
+   * 12px; bumped to 13px when 10px and 12px were retired as too
+   * small for legibility on mobile. Any usage that previously
+   * relied on text-[12px] now resolves through the token instead. */
+  --text-caption: 13px;
+  --text-caption--font-weight: 400;
+  --text-caption--line-height: 1.4;
+
+  /* Overline — tiny uppercase pills + overlines. Used for the
+   * "Now" event pill, the "UP NEXT" home-teaser overline, the
+   * day-circle "Tue" label on /today, and the WeekStrip day
+   * initials. Renamed from --text-tab-label 2026-05-21 (token name
+   * was stale — it is never applied to Tabs; Tabs use
+   * --text-list-label). */
+  --text-overline: 11px;
+  --text-overline--font-weight: 500;
+  --text-overline--line-height: 1;
+  --text-overline--letter-spacing: 0.02em;
+
+  /* List label — 16/500 label seen on every labeled interactive
+   * row in the product: BottomNav items, Tabs, To-do rows,
+   * Settings rows, AgendaCard items. Renamed from
+   * --text-nav-label 2026-05-21 (scope grew past nav into
+   * list/row contexts). */
+  --text-list-label: 16px;
+  --text-list-label--font-weight: 500;
+  --text-list-label--line-height: 1;
+
+  --text-button: 16px;
+  --text-button--font-weight: 500;
+  --text-button--line-height: 1;
+  /* --text-link, --text-button-small, --text-emphasis removed
+   * 2026-05-21 — none consumed in src. */
+}
+
+/* Event category colors (work / personal / health) are mapped to brand
+ * palette utilities in lib/categories.ts (CATEGORY_BG_CLASS) — the
+ * single source of truth, shared by the Today bars, Calendar week-strip
+ * dots, and AgendaCard bars. No dedicated --ff-cat-* tokens: routing
+ * them through a CSS-var indirection caused bundler-pruning and
+ * stale-chunk drift, so they were retired 2026-05-22. */
+
+/* ── Glassmorphism surfaces (Phase 3) ──────────────────────────────
+ * Layered technique — translucent white gradient + backdrop-filter
+ * blur over the primary green canvas. NOT @theme tokens; consumed
+ * directly in CSS via var(...).
+ * Reference: _design-system-reference/preview/colors-product-greens.html
+ */
+:root {
+  /* Top app header bar */
+  --surface-header-nav-bg:     linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%);
+  --surface-header-nav-blur:   blur(20px);
+  --surface-header-nav-border: 1px solid rgba(255,255,255,0.12);
+
+  /* Glass card surface — canonical recipe used by every <Card> in
+   * production. Single source of truth for all glass-card chrome
+   * (Home hero + teaser, Today section cards, Countdown items, etc.). */
+  --surface-card-bg:           linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%);
+  --surface-card-blur:         blur(12px);
+  --surface-card-border:       1px solid rgba(255,255,255,0.20);
+  --surface-card-radius:       14px;
+
+  /* Bottom tab bar */
+  --surface-bottom-nav-bg:     linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%);
+  --surface-bottom-nav-blur:   blur(20px);
+  --surface-bottom-nav-border: 1px solid rgba(255,255,255,0.12);
+
+  /* State token — applied transiently, not as a surface */
+  --state-fab-pressed:         var(--color-moss);
+}
+
+/* ── Jungle animation (Phase 6) ────────────────────────────────
+ * Ported from v1 codebase (globals.css lines 423–443 + JungleIllustration.jsx class hooks).
+ * Five class-bound animations: tree sway (t1/t2/t3 with staggered delays),
+ * bird bob (bird-group), frog blink (frog-eye × 2 with second eye delayed 0.3s).
+ * Reduced-motion support: all animations disabled when OS-level preference is set.
+ */
+@layer utilities {
+  /* Hide native scrollbar while preserving scroll behavior. Used on
+   * <main> (the iPhone frame's content area) and on the Calendar
+   * screen's horizontal MonthStrip to maintain the mobile-app
+   * illusion. Touch / mouse-wheel / keyboard scrolling still work;
+   * only the scrollbar UI is hidden. */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(-0.8deg); transform-origin: bottom center; }
+    50% { transform: rotate(0.8deg); transform-origin: bottom center; }
+  }
+  @keyframes sway2 {
+    0%, 100% { transform: rotate(0.6deg); transform-origin: bottom center; }
+    50% { transform: rotate(-0.6deg); transform-origin: bottom center; }
+  }
+  @keyframes birdBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+  @keyframes frogBlink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.15); }
+  }
+  .t1 { animation: sway 3.8s ease-in-out infinite; }
+  .t2 { animation: sway2 4.5s ease-in-out infinite; }
+  .t3 { animation: sway 3.2s ease-in-out infinite 0.4s; }
+  .bird-group { animation: birdBob 2.2s ease-in-out infinite; }
+  .frog-eye { animation: frogBlink 4s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .t1, .t2, .t3, .bird-group, .frog-eye { animation: none; }
+  }
+}

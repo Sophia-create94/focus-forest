@@ -1,0 +1,18 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css"/>
+<style>
+  html,body{margin:0;padding:0;background:#f4f4f4;}
+  .card{padding:24px;display:flex;gap:24px;align-items:center;}
+  .box{background:#fff;width:120px;height:80px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-size:12px;color:#666;}
+  .sm{box-shadow:0 2px 8px rgba(0,0,0,0.18);}
+  .md{box-shadow:0 4px 16px rgba(0,0,0,0.30);}
+  .lg{box-shadow:0 8px 32px rgba(0,0,0,0.28);}
+  .lbl{font-family:var(--font-body);font-size:11px;color:#666;text-align:center;margin-top:8px;}
+  .col{display:flex;flex-direction:column;}
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="box sm">sm</div><div class="lbl">0 2 8 / .18</div></div>
+  <div class="col"><div class="box md">md (FAB)</div><div class="lbl">0 4 16 / .30</div></div>
+  <div class="col"><div class="box lg">lg (notif)</div><div class="lbl">0 8 32 / .28</div></div>
+</div></body></html>

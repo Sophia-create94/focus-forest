@@ -1,0 +1,466 @@
+<!doctype html>
+<html><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../colors_and_type.css?v=ratio3"/>
+<style>
+  html,body{margin:0;padding:0;background:#fff;font-family:var(--font-body);color:#111;}
+  .wrap{padding:22px 24px;display:flex;flex-direction:column;gap:22px;box-sizing:border-box;}
+
+  /* ── Section heads ── */
+  .section-head{display:flex;align-items:baseline;gap:10px;border-top:1px solid #eee;padding-top:14px;}
+  .section-head:first-child{border-top:none;padding-top:0;}
+  .section-title{font-family:var(--font-body);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#222;}
+  .section-sub{font-size:11px;color:#777;}
+
+  /* ── Polished ratio bar ── */
+  .bar-shell{
+    background:#FAFAF8;
+    border:1px solid #EEE;
+    border-radius:12px;
+    padding:6px;
+    display:flex;
+    gap:4px;
+    height:88px;
+    box-sizing:border-box;
+  }
+  .seg{
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:600;font-size:13px;
+    text-align:center;line-height:1.2;
+    box-sizing:border-box;
+  }
+  .seg-primary{flex:60;background:#3B7A57;color:#fff;}
+  .seg-white  {flex:30;background:#FFFFFF;color:#444;border:1px solid #ECECEC;}
+  .seg-accent {flex:10;background:#F6AE2D;color:#1a1a1a;}
+
+  .bar-legend{
+    display:grid;grid-template-columns:60fr 30fr 10fr;gap:4px;
+    padding:0 6px;margin-top:8px;
+    font-family:var(--font-body);font-size:11px;color:#444;
+  }
+  .bar-legend > div{display:flex;flex-direction:column;gap:2px;align-items:flex-start;padding:0 4px;}
+  .bar-legend .pct{font-weight:700;color:#111;letter-spacing:.02em;}
+  .bar-legend .name{color:#222;}
+  .bar-legend .hex{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:#666;}
+
+  /* ── 10% accent breakdown ── */
+  .accent-strip{
+    display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:10px;
+  }
+  .accent-card{
+    border:1px solid #eee;border-radius:10px;overflow:hidden;
+    display:flex;flex-direction:column;background:#fff;
+  }
+  .accent-chip{height:48px;}
+  .accent-meta{padding:10px 12px;display:flex;flex-direction:column;gap:4px;}
+  .accent-name{font-family:var(--font-display);font-size:12.5px;font-weight:700;color:#111;display:flex;align-items:baseline;gap:8px;}
+  .accent-hex{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:#777;font-weight:400;}
+  .accent-role{font-size:11px;line-height:1.4;color:#555;}
+
+  /* ── Real-world demonstration ── */
+  .demo{
+    display:grid;grid-template-columns:260px 1fr;gap:32px;align-items:center;
+  }
+
+  /* Phone frame */
+  .phone{
+    width:260px;height:540px;
+    border-radius:40px;
+    background:#111;
+    padding:8px;box-sizing:border-box;
+    box-shadow:0 8px 24px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.10), 0 0 0 1px #2a2a2a;
+    position:relative;
+  }
+  .phone-screen{
+    width:100%;height:100%;
+    background:#3B7A57;            /* primary green canvas */
+    border-radius:32px;
+    overflow:hidden;
+    position:relative;
+    display:flex;flex-direction:column;
+    font-family:var(--font-body);
+  }
+  /* Dynamic island */
+  .pf-island{
+    position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:78px;height:22px;background:#111;border-radius:13px;z-index:30;pointer-events:none;
+  }
+  /* Status bar — full iOS-style */
+  .pf-status{
+    height:36px;display:flex;align-items:center;justify-content:space-between;
+    padding:11px 18px 0;color:#fff;flex:none;position:relative;z-index:5;
+  }
+  .pf-status .time{font-family:var(--font-body);font-weight:600;font-size:11.5px;letter-spacing:.01em;}
+  .pf-status .icons{display:flex;align-items:center;gap:5px;}
+  .pf-status .icons svg{display:block;}
+
+  /* App header — green-gradient band with ff logo + wordmark */
+  .pf-header{
+    height:38px;display:flex;align-items:center;
+    padding:0 14px;
+    background:linear-gradient(180deg, #4a9468 0%, #3B7A57 100%);
+    border-bottom:1px solid rgba(255,255,255,0.10);
+    flex:none;
+  }
+  .pf-logo-circle{
+    width:22px;height:22px;border-radius:50%;background:#3B7A57;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:700;font-size:9px;color:#fff;letter-spacing:-0.02em;
+    border:1px solid rgba(255,255,255,0.18);
+  }
+  .pf-wordmark{font-family:var(--font-display);font-weight:500;font-size:13px;color:#fff;margin-left:7px;letter-spacing:-0.01em;}
+  .pf-header-spacer{flex:1;}
+  .pf-header-dots{color:#fff;font-size:14px;letter-spacing:1px;}
+
+  /* Body */
+  .pf-body{flex:1;padding:8px 14px 6px;display:flex;flex-direction:column;gap:8px;overflow:hidden;}
+  .pf-welcome{color:#fff;font-family:var(--font-display);font-weight:500;font-size:22px;margin:4px 2px 0;line-height:1;}
+  .pf-progress-label{color:#fff;font-family:var(--font-display);font-weight:500;font-size:13px;margin:0 2px;opacity:.95;}
+
+  /* Glass progress card */
+  .pf-card{
+    border-radius:14px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,0.20);
+    padding:11px 12px 14px;display:flex;flex-direction:column;gap:8px;
+    color:#fff;position:relative;
+  }
+  .pf-level{font-family:var(--font-display);font-weight:600;font-size:13px;line-height:1.25;color:#fff;}
+
+  /* Jungle scene container */
+  .pf-jungle{
+    height:140px;border-radius:10px;overflow:hidden;
+    position:relative;
+    background:#3B7A57;
+  }
+  .pf-jungle svg{display:block;width:100%;height:100%;}
+
+  /* CTA half-overlapping the jungle */
+  .pf-cta{
+    position:absolute;left:50%;bottom:8px;transform:translateX(-50%);
+    background:#F6AE2D;color:#0E0F0C;
+    font-family:var(--font-display);font-weight:600;font-size:11px;
+    padding:7px 14px;border-radius:24px;border:none;
+    box-shadow:0 2px 8px rgba(0,0,0,0.22);
+    z-index:2;white-space:nowrap;
+  }
+
+  /* Bottom nav — 5 items with center FAB */
+  .pf-nav{
+    height:54px;flex:none;
+    background:linear-gradient(180deg, #4a9468 0%, #3B7A57 100%);
+    border-top:1px solid rgba(255,255,255,0.10);
+    display:flex;align-items:flex-end;justify-content:space-around;
+    padding:0 6px 8px;position:relative;z-index:6;
+  }
+  .pf-nav .item{
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+    color:rgba(255,255,255,0.85);font-size:8.5px;font-weight:500;
+    flex:1;
+  }
+  .pf-nav .icon{width:14px;height:14px;color:rgba(255,255,255,0.65);}
+  .pf-nav .item.active .icon{color:#F6AE2D;}
+  .pf-nav .item.active{color:#fff;}
+  .pf-nav .fab-wrap{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    color:#fff;font-size:8.5px;font-weight:500;
+  }
+  .pf-nav .fab{
+    width:36px;height:36px;border-radius:50%;
+    background:#F6AE2D;
+    display:flex;align-items:center;justify-content:center;
+    color:#1a1a1a;font-size:18px;font-weight:300;line-height:1;
+    box-shadow:0 3px 10px rgba(0,0,0,0.28);
+    margin-top:-22px;margin-bottom:2px;
+    border:none;
+  }
+
+  /* ── Annotation legend (text-only callouts beside the mockup) ── */
+  .annot-legend{display:flex;flex-direction:column;gap:14px;padding-top:4px;}
+  .annot-item{display:flex;gap:12px;align-items:flex-start;}
+  .annot-item .badge{
+    flex:none;width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--font-display);font-weight:700;font-size:13px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.18);
+  }
+  .annot-item.b60 .badge{background:#3B7A57;color:#fff;}
+  .annot-item.b30 .badge{background:#fff;color:#222;border:1px solid #ddd;}
+  .annot-item.b10 .badge{background:#F6AE2D;color:#1a1a1a;}
+  .annot-body{display:flex;flex-direction:column;gap:2px;}
+  .annot-title{font-family:var(--font-display);font-weight:700;font-size:13px;color:#111;}
+  .annot-title .pct{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:600;color:#666;font-size:11px;margin-left:6px;}
+  .annot-text{font-size:11.5px;line-height:1.5;color:#444;}
+
+  /* ── Usage rule ── */
+  .rule{
+    font-size:11.5px;line-height:1.6;color:#444;
+    padding:14px 16px;background:#FAFAF8;border-left:3px solid #3B7A57;border-radius:2px;
+  }
+  .rule b{color:#222;font-weight:700;}
+  .rule .pill{display:inline-block;padding:1px 6px;border-radius:8px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;font-weight:600;}
+  .rule .p60{background:#3B7A57;color:#fff;}
+  .rule .p30{background:#fff;color:#222;border:1px solid #ddd;}
+  .rule .p10{background:#F6AE2D;color:#1a1a1a;}
+</style></head>
+<body><div class="wrap">
+
+  <!-- ─── Bar ─── -->
+  <div class="section-head">
+    <div class="section-title">60-30-10 ratio · brand canvas mix</div>
+    <div class="section-sub">Primary · Surface · Accent</div>
+  </div>
+
+  <div>
+    <div class="bar-shell">
+      <div class="seg seg-primary">60%<br/>Primary Green</div>
+      <div class="seg seg-white">30%<br/>White</div>
+      <div class="seg seg-accent">10%<br/>Accents</div>
+    </div>
+    <div class="bar-legend">
+      <div><span class="pct">60%</span><span class="name">Primary Green</span><span class="hex">#3B7A57</span></div>
+      <div><span class="pct">30%</span><span class="name">White surfaces</span><span class="hex">#FFFFFF</span></div>
+      <div><span class="pct">10%</span><span class="name">Accents (mixed)</span><span class="hex">see below ↓</span></div>
+    </div>
+  </div>
+
+  <!-- ─── 10% breakdown ─── -->
+  <div class="section-head">
+    <div class="section-title">What's inside the 10%</div>
+    <div class="section-sub">Each accent has a defined role · most of the 10% is Yellow</div>
+  </div>
+
+  <div class="accent-strip">
+    <div class="accent-card">
+      <div class="accent-chip" style="background:#F6AE2D;"></div>
+      <div class="accent-meta">
+        <div class="accent-name">Yellow <span class="accent-hex">#F6AE2D</span></div>
+        <div class="accent-role">Primary CTA color (most of the 10%).</div>
+      </div>
+    </div>
+    <div class="accent-card">
+      <div class="accent-chip" style="background:#F1F9E7;border-bottom:1px solid #ECECEC;"></div>
+      <div class="accent-meta">
+        <div class="accent-name">Mist <span class="accent-hex">#F1F9E7</span></div>
+        <div class="accent-role">Soft highlights, illustrative fills.</div>
+      </div>
+    </div>
+    <div class="accent-card">
+      <div class="accent-chip" style="background:#9CAA87;"></div>
+      <div class="accent-meta">
+        <div class="accent-name">Sage <span class="accent-hex">#9CAA87</span></div>
+        <div class="accent-role">Decorative accents in illustrations.</div>
+      </div>
+    </div>
+    <div class="accent-card">
+      <div class="accent-chip" style="background:#0E0F0C;"></div>
+      <div class="accent-meta">
+        <div class="accent-name">Black <span class="accent-hex">#0E0F0C</span></div>
+        <div class="accent-role">Text on yellow CTAs only.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Real-world demonstration ─── -->
+  <div class="section-head">
+    <div class="section-title">In context · Home screen</div>
+    <div class="section-sub">Numbered callouts identify each ratio band</div>
+  </div>
+
+  <div class="demo">
+    <!-- Phone -->
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="pf-island"></div>
+
+        <!-- Status bar -->
+        <div class="pf-status">
+          <span class="time">9:41</span>
+          <div class="icons">
+            <!-- signal -->
+            <svg width="14" height="9" viewBox="0 0 14 9" fill="#fff" aria-hidden="true"><rect x="0" y="6" width="2.5" height="3" rx="0.5"/><rect x="3.5" y="4.5" width="2.5" height="4.5" rx="0.5"/><rect x="7" y="2.5" width="2.5" height="6.5" rx="0.5"/><rect x="10.5" y="0" width="2.5" height="9" rx="0.5"/></svg>
+            <!-- wifi -->
+            <svg width="12" height="9" viewBox="0 0 12 9" fill="#fff" aria-hidden="true"><path d="M6 0a8.7 8.7 0 016 2.4l-1.1 1.2A7 7 0 006 1.5 7 7 0 001.1 3.6L0 2.4A8.7 8.7 0 016 0zm0 3a5.7 5.7 0 014 1.5L8.9 5.7A4 4 0 006 4.5 4 4 0 003.1 5.7L2 4.5A5.7 5.7 0 016 3zm0 3a2.7 2.7 0 011.9.7L6 8.6 4.1 6.7A2.7 2.7 0 016 6z"/></svg>
+            <!-- battery -->
+            <svg width="22" height="10" viewBox="0 0 22 10" aria-hidden="true"><rect x="0.5" y="0.5" width="18" height="9" rx="2" fill="none" stroke="#fff" stroke-opacity="0.55"/><rect x="19" y="3.5" width="1.5" height="3" rx="0.5" fill="#fff" fill-opacity="0.55"/><rect x="2" y="2" width="14" height="6" rx="1" fill="#fff"/></svg>
+          </div>
+        </div>
+
+        <!-- App header -->
+        <div class="pf-header">
+          <div class="pf-logo-circle">ff</div>
+          <span class="pf-wordmark">focusforest</span>
+          <span class="pf-header-spacer"></span>
+          <span class="pf-header-dots">⋯</span>
+        </div>
+
+        <!-- Body -->
+        <div class="pf-body">
+          <div class="pf-welcome">Welcome!</div>
+          <div class="pf-progress-label">Your progress</div>
+          <div class="pf-card">
+            <div class="pf-level">Good job!<br/>You reached level 5</div>
+            <div class="pf-jungle">
+              <!-- Compact jungle scene: sky dome + ground + 3 trees + toucan + monkey + frog. Lifted from JungleIllustration.jsx. -->
+              <svg viewBox="0 0 357 268" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-label="Jungle scene">
+                <defs>
+                  <radialGradient id="rsky" cx="50%" cy="100%" r="85%">
+                    <stop offset="0%" stop-color="#B0E0FF" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#4DA8D0" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <!-- sky dome -->
+                <ellipse cx="178" cy="268" rx="210" ry="192" fill="#87CEEB"/>
+                <ellipse cx="178" cy="268" rx="210" ry="192" fill="url(#rsky)"/>
+                <!-- ground -->
+                <rect x="0" y="200" width="357" height="68" fill="#4FAC45"/>
+                <ellipse cx="178" cy="200" rx="210" ry="14" fill="#3E9A35"/>
+                <!-- background trees -->
+                <g opacity="0.75">
+                  <rect x="50" y="148" width="9" height="56" fill="#6B4226" rx="2"/>
+                  <ellipse cx="55" cy="136" rx="24" ry="22" fill="#2E7D2E"/>
+                  <ellipse cx="43" cy="145" rx="16" ry="15" fill="#388E3C"/>
+                  <ellipse cx="67" cy="141" rx="18" ry="16" fill="#388E3C"/>
+                </g>
+                <g opacity="0.75">
+                  <rect x="292" y="151" width="9" height="52" fill="#6B4226" rx="2"/>
+                  <ellipse cx="296" cy="140" rx="22" ry="20" fill="#2E7D2E"/>
+                  <ellipse cx="284" cy="149" rx="15" ry="14" fill="#388E3C"/>
+                  <ellipse cx="308" cy="146" rx="16" ry="15" fill="#388E3C"/>
+                </g>
+                <!-- foreground trees -->
+                <g>
+                  <rect x="87" y="120" width="12" height="84" fill="#7A4E2E" rx="3"/>
+                  <ellipse cx="93" cy="108" rx="34" ry="32" fill="#2A7330"/>
+                  <ellipse cx="76" cy="120" rx="24" ry="22" fill="#338A38"/>
+                  <ellipse cx="110" cy="116" rx="26" ry="23" fill="#338A38"/>
+                  <ellipse cx="93" cy="96" rx="22" ry="20" fill="#44A348"/>
+                </g>
+                <g>
+                  <rect x="163" y="92" width="14" height="112" fill="#7A4E2E" rx="3.5"/>
+                  <ellipse cx="170" cy="78" rx="42" ry="38" fill="#1F6B22"/>
+                  <ellipse cx="148" cy="92" rx="30" ry="27" fill="#2A7D30"/>
+                  <ellipse cx="192" cy="88" rx="32" ry="29" fill="#2A7D30"/>
+                  <ellipse cx="170" cy="63" rx="26" ry="23" fill="#39A33E"/>
+                </g>
+                <g>
+                  <rect x="244" y="124" width="12" height="79" fill="#7A4E2E" rx="3"/>
+                  <ellipse cx="250" cy="112" rx="32" ry="30" fill="#2A7330"/>
+                  <ellipse cx="233" cy="123" rx="22" ry="21" fill="#338A38"/>
+                  <ellipse cx="267" cy="119" rx="24" ry="22" fill="#338A38"/>
+                  <ellipse cx="250" cy="100" rx="21" ry="19" fill="#44A348"/>
+                </g>
+                <!-- toucan -->
+                <g transform="translate(188, 78)">
+                  <rect x="-4" y="30" width="28" height="5" fill="#5C3A1E" rx="2.5"/>
+                  <ellipse cx="8" cy="20" rx="13" ry="10" fill="#1A3A5C"/>
+                  <ellipse cx="4" cy="22" rx="7" ry="6" fill="#FFFDE7"/>
+                  <circle cx="18" cy="12" r="9.5" fill="#111827"/>
+                  <path d="M26 9 Q44 8 43 15 Q42 20 26 18 Z" fill="#F6AE2D"/>
+                  <circle cx="22" cy="10" r="3" fill="white"/>
+                  <circle cx="22.5" cy="10" r="2" fill="#111"/>
+                </g>
+                <!-- monkey -->
+                <g transform="translate(112, 163)">
+                  <ellipse cx="12" cy="26" rx="12" ry="10" fill="#8D6E63"/>
+                  <circle cx="12" cy="12" r="11" fill="#8D6E63"/>
+                  <ellipse cx="12" cy="15" rx="8" ry="6" fill="#BCAAA4"/>
+                  <circle cx="1" cy="12" r="5" fill="#8D6E63"/>
+                  <circle cx="23" cy="12" r="5" fill="#8D6E63"/>
+                  <circle cx="8" cy="10" r="2.5" fill="#3E2723"/>
+                  <circle cx="16" cy="10" r="2.5" fill="#3E2723"/>
+                  <ellipse cx="12" cy="14" rx="2.5" ry="1.8" fill="#6D4C41"/>
+                </g>
+                <!-- frog -->
+                <g transform="translate(255, 188)">
+                  <ellipse cx="10" cy="12" rx="16" ry="11" fill="#56C448"/>
+                  <ellipse cx="10" cy="4" rx="14" ry="10" fill="#66CC58"/>
+                  <ellipse cx="2" cy="-2" rx="6.5" ry="6" fill="#80D87A"/>
+                  <circle cx="2" cy="-2" r="4" fill="#111"/>
+                  <ellipse cx="18" cy="-2" rx="6.5" ry="6" fill="#80D87A"/>
+                  <circle cx="18" cy="-2" r="4" fill="#111"/>
+                  <path d="M3 8 Q10 12 17 8" stroke="#3E9B3E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                </g>
+              </svg>
+              <button class="pf-cta" type="button">See your jungle here</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom nav: Home · Events · Add (FAB) · Progress · Profile -->
+        <div class="pf-nav">
+          <div class="item active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+            Home
+          </div>
+          <div class="item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
+            Events
+          </div>
+          <div class="fab-wrap">
+            <div class="fab">+</div>
+            Add
+          </div>
+          <div class="item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,17 9,11 13,15 21,7"/><polyline points="15,7 21,7 21,13"/></svg>
+            Progress
+          </div>
+          <div class="item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>
+            Profile
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="annot-legend">
+      <div class="annot-item b60">
+        <div class="badge">1</div>
+        <div class="annot-body">
+          <div class="annot-title">Primary canvas <span class="pct">60%</span></div>
+          <div class="annot-text">
+            The full-bleed Primary Green (<code>#3B7A57</code>) canvas, plus the glassmorphism progress card —
+            still primary-green-derived because its translucent fill sits over the same canvas. This is the brand floor.
+          </div>
+        </div>
+      </div>
+
+      <div class="annot-item b30">
+        <div class="badge">2</div>
+        <div class="annot-body">
+          <div class="annot-title">Light surfaces &amp; text <span class="pct">30%</span></div>
+          <div class="annot-text">
+            White (<code>#FFFFFF</code>) text — "Welcome!", "Your progress", "Good job!" — together with notification cards
+            (on lock screen) and any other light surfaces. Provides breathing room and content legibility.
+          </div>
+        </div>
+      </div>
+
+      <div class="annot-item b10">
+        <div class="badge">3</div>
+        <div class="annot-body">
+          <div class="annot-title">Accent punctuation <span class="pct">10%</span></div>
+          <div class="annot-text">
+            Small, distributed moments — not one big block. The Yellow "See your jungle here" CTA (<code>#F6AE2D</code>),
+            the active Home nav icon's yellow tint, and illustrative Sage/Cream notes inside the jungle scene
+            (toucan beak, animal highlights). One CTA per screen; accents punctuate, never dominate.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Usage rule ─── -->
+  <div class="rule">
+    <b>The ratio rule.</b>
+    The 60-30-10 rule keeps Focus Forest visually grounded in its primary green identity
+    (<span class="pill p60">60%</span>) with breathing room from light surfaces
+    (<span class="pill p30">30%</span>) and energetic moments from accents
+    (<span class="pill p10">10%</span>).
+    Going <b>beyond 10% on accents</b> — for example, multiple yellow CTAs on one screen — breaks the visual hierarchy and makes the brand feel restless.
+    Going <b>below 30% on light surfaces</b> makes screens feel heavy and reduces legibility for content.
+  </div>
+
+</div></body></html>
