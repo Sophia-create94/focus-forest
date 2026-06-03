@@ -33,16 +33,16 @@ function useBottomNavContext() {
 
 const bottomNavVariants = cva(
   [
-    // The bar's design height is 82px with labels resting 14px above its
-    // baseline. On devices with a home indicator (iOS standalone), the
-    // safe-area inset is folded into BOTH the height and the bottom
-    // padding: the extra height extends the glass/green background down
-    // through the safe area so it sits flush at the physical bottom with
-    // no page-background gap, while the matching bottom padding lifts the
-    // labels to rest just above the home indicator. Where there is no
-    // safe area (desktop/browser) the inset resolves to 0 and the bar is
-    // unchanged at 82px / 14px.
-    "w-full h-[calc(82px_+_env(safe-area-inset-bottom))] px-[10px] pb-[calc(14px_+_env(safe-area-inset-bottom))]",
+    // The bar is a 68px content region (icons + labels) plus a bottom
+    // "chin". On a plain screen the chin is 14px; on a device with a home
+    // indicator (iOS standalone) it grows to the safe-area inset so the
+    // bar's glass/green background fills the indicator zone flush to the
+    // physical bottom while the labels rest just above the indicator.
+    // max() (NOT a sum) is the key: the chin is the LARGER of 14px or the
+    // inset, so the labels aren't pushed an extra 14px up into a floating
+    // band. Where there is no safe area (desktop/browser) the inset is 0,
+    // max() yields 14px, and the bar is unchanged at 82px / 14px.
+    "w-full h-[calc(68px_+_max(14px,env(safe-area-inset-bottom)))] px-[10px] pb-[max(14px,env(safe-area-inset-bottom))]",
     "flex items-end justify-around",
     "relative",
     "[background:var(--surface-bottom-nav-bg)]",
