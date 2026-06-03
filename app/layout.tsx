@@ -1,10 +1,28 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { niramit, sourceSans } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Focus Forest",
   description: "Motivational calendar app — grow your day, one task at a time.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    title: "Focus Forest",
+    statusBarStyle: "black-translucent",
+  },
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
+  other: {
+    // Legacy iOS Safari needs this prefixed tag to launch full-screen
+    // (standalone) from the home screen; Next only emits the modern
+    // non-prefixed `mobile-web-app-capable`, so this one is added by hand.
+    "apple-mobile-web-app-capable": "yes",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#3B7A57",
 };
 
 export default function RootLayout({
