@@ -9,6 +9,7 @@ interface PhoneFrameProps {
 export function PhoneFrame({ children, className }: PhoneFrameProps) {
   return (
     <div
+      data-phone-frame
       className={cn(
         // Mobile-first (< md:): fill the device viewport directly.
         // w-screen + h-[100dvh] decouple sizing from the parent flex

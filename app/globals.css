@@ -389,3 +389,24 @@
     padding-top: env(safe-area-inset-top);
   }
 }
+
+/* Installed-app full-bleed height.
+ *
+ * iOS standalone web apps have a long-standing bug where `100dvh`
+ * resolves SHORTER than the physical screen, stopping above the home
+ * indicator. Because the body/frame end short, the page's green
+ * background shows in the strip beneath the bottom nav. `100lvh` (the
+ * largest viewport — which in standalone, with no browser chrome, is the
+ * full screen) makes the body and phone frame reach the physical bottom
+ * so the nav sits flush at the edge with no gap. Scoped to phone widths
+ * so a desktop PWA install keeps its scrollable centered mockup, and to
+ * standalone so a normal browser tab (where dvh must track the URL bar)
+ * is untouched. These unlayered rules override Tailwind's h-[100dvh]. */
+@media (display-mode: standalone) and (max-width: 767px) {
+  body {
+    height: 100lvh;
+  }
+  [data-phone-frame] {
+    height: 100lvh;
+  }
+}
