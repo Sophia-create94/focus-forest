@@ -77,7 +77,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           desktop cream chrome. Rounded clipping at the bezel corners
           is handled by the PhoneFrame viewport's clip-path. */}
       <div className="flex flex-col h-full bg-primary relative" data-fab-portal>
-        <div className="flex-shrink-0 [background:var(--surface-header-nav-bg)] [backdrop-filter:var(--surface-header-nav-blur)] [-webkit-backdrop-filter:var(--surface-header-nav-blur)] [border-bottom:var(--surface-header-nav-border)]">
+        <div data-app-chrome className="flex-shrink-0 [background:var(--surface-header-nav-bg)] [backdrop-filter:var(--surface-header-nav-blur)] [-webkit-backdrop-filter:var(--surface-header-nav-blur)] [border-bottom:var(--surface-header-nav-border)]">
           <StatusBar />
           <AppHeader showDots={showDots} />
         </div>

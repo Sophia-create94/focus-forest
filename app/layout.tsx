@@ -23,6 +23,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#3B7A57",
+  // Lets content extend under the iOS status bar and makes the
+  // env(safe-area-inset-*) values resolve, which the standalone
+  // status-bar rule in globals.css relies on.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

@@ -371,3 +371,21 @@
     .t1, .t2, .t3, .bird-group, .frog-eye { animation: none; }
   }
 }
+
+/* Installed-app (home-screen) chrome.
+ *
+ * When launched from the iOS home screen as a standalone web app, iOS
+ * draws its own real status bar (clock, signal, battery) over the web
+ * view. The app's faux status bar would then sit directly beneath it,
+ * showing the time and battery twice. In standalone mode only, hide the
+ * faux bar and reserve the real status bar's height via the top
+ * safe-area inset so the app header drops just below it. In a normal
+ * browser tab this query never matches, so the mockup is untouched. */
+@media (display-mode: standalone) {
+  [data-slot="status-bar"] {
+    display: none;
+  }
+  [data-app-chrome] {
+    padding-top: env(safe-area-inset-top);
+  }
+}
