@@ -65,7 +65,7 @@ export default function RootLayout({
             Focus Forest
           </h1>
           <p className="font-body text-[16px] text-primary/85">
-            Your motivational calendar
+            The easy-to-use motivational calendar app
           </p>
         </div>
 
