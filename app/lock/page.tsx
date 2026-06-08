@@ -1,4 +1,5 @@
 import { PhoneFrame } from "@/components/phone-frame"
+import { StatusBar } from "@/components/ui/status-bar"
 import Link from "next/link"
 
 // Lock screen for the /lock route. Strict 1:1 implementation of
@@ -31,41 +32,20 @@ export default function LockPage() {
   return (
     <PhoneFrame>
       <div
-        className="relative h-full pt-3.5 px-4"
+        className="relative h-full"
         style={{
           background:
             "linear-gradient(180deg, #DB9590 0%, #B494BF 50%, #52729C 100%)",
         }}
       >
-        {/* Status bar — inline SVGs per DS spec (NOT the brand StatusBar primitive) */}
-        <div
-          aria-hidden="true"
-          className="flex justify-between items-center px-1.5 pb-3 text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.25)]"
-        >
-          <span className="font-system text-[17px] font-semibold tracking-[-0.3px]">
-            9:41
-          </span>
-          <div className="flex items-center gap-[5px]">
-            {/* Signal */}
-            <svg width="17" height="11" viewBox="0 0 17 11" fill="#fff">
-              <rect x="0" y="6" width="3" height="5" rx="0.7" />
-              <rect x="4.5" y="4" width="3" height="7" rx="0.7" />
-              <rect x="9" y="2" width="3" height="9" rx="0.7" />
-              <rect x="13.5" y="0" width="3" height="11" rx="0.7" />
-            </svg>
-            {/* WiFi */}
-            <svg width="15" height="11" viewBox="0 0 15 11" fill="#fff">
-              <path d="M7.5 9.4a1.1 1.1 0 110 2.2 1.1 1.1 0 010-2.2zM3.3 5.8a5.9 5.9 0 018.4 0l-1.3 1.3a4.1 4.1 0 00-5.8 0L3.3 5.8zM.5 3a9.7 9.7 0 0114 0l-1.3 1.3a7.8 7.8 0 00-11.4 0L.5 3z" />
-            </svg>
-            {/* Battery */}
-            <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
-              <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="#fff" strokeOpacity="0.4" strokeWidth="1" />
-              <rect x="2" y="2" width="18" height="8" rx="1.5" fill="#fff" />
-              <path d="M23 4v4a1.5 1.5 0 000-4z" fill="#fff" fillOpacity="0.4" />
-            </svg>
-          </div>
-        </div>
+        {/* Status bar — shared StatusBar primitive so it matches the rest of
+            the app 1:1 (same time, icons, sizing as a real iPhone). A subtle
+            drop-shadow keeps the white chrome legible over the wallpaper. */}
+        <StatusBar className="[filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.25))]" />
 
+        {/* Lock-screen content (status bar is full-bleed above; everything
+            else gets the standard horizontal padding) */}
+        <div className="px-4">
         {/* Lock icon */}
         <div className="flex justify-center mt-0.5 mb-1.5 [filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.25))]">
           <svg aria-hidden="true" width="14" height="17" viewBox="0 0 14 17" fill="#fff">
@@ -140,12 +120,15 @@ export default function LockPage() {
             I am done
           </button>
         </div>
+        </div>
 
-        {/* Utility buttons — absolute positioned per DS spec */}
+        {/* Utility buttons — flashlight (left) and camera (right), anchored
+            near the bottom edge just above the home indicator, matching a
+            real iPhone lock screen. Decorative: no pointer cursor. */}
         <button
           type="button"
           aria-label="Flashlight"
-          className="absolute bottom-20 left-6 size-[50px] rounded-pill bg-black/25 flex items-center justify-center cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-yellow focus-visible:outline-offset-2"
+          className="absolute bottom-8 left-6 size-[50px] rounded-pill bg-black/25 flex items-center justify-center cursor-default outline-none focus-visible:outline-2 focus-visible:outline-yellow focus-visible:outline-offset-2"
         >
           <svg width="23" height="23" viewBox="0 0 22 22" fill="#fff" aria-hidden="true">
             <path d="M7.4 5h7.2l-1.1-2.4a1.2 1.2 0 00-1.1-.7H9.6a1.2 1.2 0 00-1.1.7L7.4 5zM6.8 6.4a.9.9 0 00-.3.7v1.5c0 .4.2.7.5.9l.6.3v9.6c0 1 .8 1.7 1.7 1.7h3.4c1 0 1.7-.8 1.7-1.7V9.8l.6-.3c.3-.2.5-.5.5-.9V7.1a.9.9 0 00-.3-.7H6.8z" />
@@ -154,7 +137,7 @@ export default function LockPage() {
         <button
           type="button"
           aria-label="Camera"
-          className="absolute bottom-20 right-6 size-[50px] rounded-pill bg-black/25 flex items-center justify-center cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-yellow focus-visible:outline-offset-2"
+          className="absolute bottom-8 right-6 size-[50px] rounded-pill bg-black/25 flex items-center justify-center cursor-default outline-none focus-visible:outline-2 focus-visible:outline-yellow focus-visible:outline-offset-2"
         >
           <svg width="22" height="20" viewBox="0 0 22 20" fill="#fff" aria-hidden="true">
             <path d="M3 5h2.8l1.5-2.5h7.4L16.2 5H19a2 2 0 012 2v9a2 2 0 01-2 2H3a2 2 0 01-2-2V7a2 2 0 012-2zm8 3.5a4 4 0 100 8 4 4 0 000-8z" />
