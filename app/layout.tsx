@@ -61,10 +61,10 @@ export default function RootLayout({
          *  with the phone's 50px top pad), so it sits to the side
          *  without pushing the centered phone frame off-axis. */}
         <div className="hidden md:block md:absolute md:left-12 md:top-[50px]">
-          <h1 className="font-display text-h2 text-primary mb-2">
+          <h1 className="font-display text-[32px] font-medium leading-[1.2] tracking-[-0.3px] text-primary mb-2">
             Focus Forest
           </h1>
-          <p className="font-body text-[16px] text-primary/85">
+          <p className="font-body text-[18px] text-primary/85">
             The easy-to-use motivational calendar app
           </p>
         </div>
