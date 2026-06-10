@@ -83,13 +83,17 @@ function StateRow({ variant, rowLabel }: { variant: Variant; rowLabel: string })
   const text = VARIANT_LABELS[variant];
   const o = STATE_OVERRIDES[variant];
   return (
-    <div className="grid grid-cols-[100px_repeat(5,minmax(0,1fr))] gap-3 items-center">
+    <div className="flex flex-col gap-2 lg:grid lg:grid-cols-[100px_1fr] lg:gap-4 lg:items-center">
       <span className="font-display text-h4">{rowLabel}</span>
-      <Cell label="default"><Button variant={variant}>{text}</Button></Cell>
-      <Cell label="hover"><Button variant={variant} className={o.hover}>{text}</Button></Cell>
-      <Cell label="pressed"><Button variant={variant} className={o.pressed}>{text}</Button></Cell>
-      <Cell label="focus"><Button variant={variant} className={o.focus}>{text}</Button></Cell>
-      <Cell label="disabled"><Button variant={variant} disabled>{text}</Button></Cell>
+      {/* auto-fit reflow: cells keep a min width and wrap to fewer
+          columns on narrow screens — no overlap, no horizontal scroll. */}
+      <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(140px,1fr))]">
+        <Cell label="default"><Button variant={variant}>{text}</Button></Cell>
+        <Cell label="hover"><Button variant={variant} className={o.hover}>{text}</Button></Cell>
+        <Cell label="pressed"><Button variant={variant} className={o.pressed}>{text}</Button></Cell>
+        <Cell label="focus"><Button variant={variant} className={o.focus}>{text}</Button></Cell>
+        <Cell label="disabled"><Button variant={variant} disabled>{text}</Button></Cell>
+      </div>
     </div>
   );
 }
@@ -548,7 +552,7 @@ function ShowcaseGrid() {
 
 export default function ComponentsPage() {
   return (
-    <main className="flex-1 flex flex-col gap-12 px-8 py-10 md:pt-32 max-w-[1200px] mx-auto">
+    <main className="flex-1 flex flex-col gap-12 px-4 md:px-8 py-10 md:pt-32 max-w-[1200px] mx-auto bg-cream max-md:h-[100dvh] max-md:overflow-y-auto">
       <header className="flex flex-col gap-2">
         <h1 className="font-display text-h1">Component sandbox</h1>
         <p className="font-body text-body text-grey max-w-2xl">
@@ -873,11 +877,15 @@ export default function ComponentsPage() {
 
           <div className="flex flex-col gap-2 mb-4">
             <span className="font-body text-caption text-grey">
-              Resize your browser to see responsive behavior. Below 768px (md breakpoint), the frame collapses and content fills the mobile container. At 768px and above, the full bezeled frame appears with fixed dimensions.
+              The bezeled device frame (414 × 868) is previewed at 768px and
+              above. On narrower screens the same PhoneFrame component is
+              designed to expand and fill the whole viewport — that is how real
+              app screens render on a phone — so it is shown here at desktop
+              widths only.
             </span>
           </div>
 
-          <div className="h-[600px] md:h-auto flex justify-center">
+          <div className="hidden md:flex md:h-auto justify-center">
             <PhoneFrame>
               <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-white via-sky/20 to-white/80 p-6 gap-4">
                 <div className="font-display text-h2 text-center text-black">
