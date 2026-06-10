@@ -56,11 +56,14 @@ export default function RootLayout({
        *  when shorter the body grows past the viewport and scrolls
        *  while the 50px pad is preserved. */}
       <body className="h-[100dvh] overflow-hidden bg-primary flex flex-col md:relative md:h-auto md:min-h-screen md:overflow-visible md:bg-cream md:items-center md:justify-center md:py-[50px]">
-        {/* Desktop title + tagline (visible md:+ only). Absolutely
-         *  positioned on the left edge, pinned near the top (aligned
-         *  with the phone's 50px top pad), so it sits to the side
-         *  without pushing the centered phone frame off-axis. */}
-        <div className="hidden md:block md:absolute md:left-12 md:top-[50px]">
+        {/* Desktop title + tagline (visible md:+ only). Responsive
+         *  placement so it never hides behind the phone:
+         *  - mobile (< md): hidden, the app is full-screen.
+         *  - md to < xl: in normal flow, centered as a header ABOVE the
+         *    phone (no room to sit beside the centered 414px frame).
+         *  - xl+ : absolutely positioned on the left edge beside the
+         *    phone, where there is finally enough horizontal room. */}
+        <div className="hidden md:block md:text-center md:mb-8 xl:absolute xl:left-12 xl:top-[50px] xl:mb-0 xl:text-left">
           <h1 className="font-display text-[32px] font-medium leading-[1.2] tracking-[-0.3px] text-primary mb-2">
             Focus Forest
           </h1>
