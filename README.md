@@ -91,6 +91,10 @@ public/              # Icons (apple-touch-icon, manifest icons) and assets
 
 Open the [live demo](https://focus-forest-sophia.vercel.app/) in **Safari** → Share → **Add to Home Screen**. It launches full-screen (no browser chrome), with the status bar and home-indicator safe areas handled natively.
 
+## Deployment
+
+Hosted on Vercel.
+
 ---
 
 *Designed by Sophia Müller. Rebuilt in 2026 with AI-assisted development.*
