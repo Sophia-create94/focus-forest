@@ -2,10 +2,35 @@ import type { Metadata, Viewport } from "next";
 import { niramit, sourceSans } from "@/lib/fonts";
 import "./globals.css";
 
+const SITE_DESCRIPTION =
+  "Calendar, to-do & countdown in one place — level up and unlock new animals as you stay organized.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://focus-forest-sophia.vercel.app"),
   title: "Focus Forest",
-  description: "Motivational calendar app — grow your day, one task at a time.",
+  description: SITE_DESCRIPTION,
   manifest: "/manifest.webmanifest",
+  openGraph: {
+    title: "Focus Forest",
+    description: SITE_DESCRIPTION,
+    type: "website",
+    url: "/",
+    siteName: "Focus Forest",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Focus Forest — a jungle-themed motivational calendar app",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Focus Forest",
+    description: SITE_DESCRIPTION,
+    images: ["/og-image.png"],
+  },
   appleWebApp: {
     title: "Focus Forest",
     statusBarStyle: "black-translucent",
