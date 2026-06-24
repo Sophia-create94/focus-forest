@@ -10,9 +10,9 @@ export const metadata: Metadata = {
     title: "Focus Forest",
     statusBarStyle: "black-translucent",
   },
-  icons: {
-    apple: "/apple-touch-icon.png",
-  },
+  // Icons are handled by the app/ file conventions (favicon.ico, icon.svg,
+  // apple-icon.png) — Next auto-injects the <link> tags. Defining
+  // metadata.icons here would suppress that file-based injection.
   other: {
     // Legacy iOS Safari needs this prefixed tag to launch full-screen
     // (standalone) from the home screen; Next only emits the modern
