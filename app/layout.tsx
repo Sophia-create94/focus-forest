@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { niramit, sourceSans } from "@/lib/fonts";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const SITE_DESCRIPTION =
@@ -101,6 +102,7 @@ export default function RootLayout({
         <div className="flex-1 md:flex-none md:flex md:items-center md:justify-center md:px-4">
           {children}
         </div>
+        <Analytics />
       </body>
     </html>
   );
